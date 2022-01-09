@@ -1,0 +1,4 @@
+// Games
+export const SET_GAMES="SET_GAMES";
+export const SET_GAMES_PAGINATED="SET_GAMES_PAGINATED";
+export const SET_GAMES_FILTERED="SET_GAMES_FILTERED";
