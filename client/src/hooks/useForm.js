@@ -1,13 +1,14 @@
 import {useState} from 'react';
-import {helpHttp} from '../helpers/helpHttp';
+// import {helpHttp} from '../helpers/helpHttp';
 
 export const useForm = (initialForm, validateForm) => {
     const [form, setForm] = useState(initialForm);
     const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [response, setResponse] = useState(null);
+    const [error, setError] = useState(false);
+    // const [loading, setLoading] = useState(false);
+    // const [response, setResponse] = useState(null);
 
-    const {post} = helpHttp();
+    // const {post} = helpHttp();
 
     const handleChange = (e) =>{
         const {name,value} = e.target;
@@ -40,22 +41,23 @@ export const useForm = (initialForm, validateForm) => {
         setErrors(validateForm(form));
 
         if(Object.keys(errors).length===0){
-            setLoading(true);
+            setError(false)
+            // setLoading(true);
             
-            // helpHttp()
-            post('https://formsubmit.co/ajax/pj.pavon@gmail.com',{
-                body: form,
-                headers:{
-                    "Content-Type": "application/json",
-                    Accept: "application/json" 
-                }
-            })
-            .then((res)=>{
-                setLoading(false);
-                setResponse(true);
-            })
+            // // helpHttp()
+            // post('https://formsubmit.co/ajax/pj.pavon@gmail.com',{
+            //     body: form,
+            //     headers:{
+            //         "Content-Type": "application/json",
+            //         Accept: "application/json" 
+            //     }
+            // })
+            // .then((res)=>{
+            //     setLoading(false);
+            //     setResponse(true);
+            // })
         }else{
-            return;
+            setError(true)
         }
 
     };
@@ -63,8 +65,7 @@ export const useForm = (initialForm, validateForm) => {
     return {
         form,
         errors,
-        loading,
-        response,
+        error,
         handleChange,
         handleChangeMult,
         handleBlur,

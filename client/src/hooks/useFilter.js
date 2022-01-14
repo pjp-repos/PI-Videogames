@@ -1,13 +1,9 @@
 import { useState } from "react";
 
-export const useFilter = (initialFilter,filterCb,data)=>{
+//,filterCb,data,dispatchFilter, closeModal=false
+export const useFilter = (initialFilter)=>{
     
     const [filter,setFilter] = useState(initialFilter);
-    const [dataFiltered, setDataFiltered] = useState(data);
-
-    if(dataFiltered===false && data.length>0){
-        setDataFiltered(data);
-    }
 
     // Events delegates
     const handleChange = (e) =>{
@@ -24,23 +20,15 @@ export const useFilter = (initialFilter,filterCb,data)=>{
         });
     };
 
-    const handleExecute = (e)=>{
-        const filterKeys = Object.keys(initialFilter);
-        console.log(filter);
-        let auxDataFiltered = data;
-        filterKeys.forEach(key=>{
-            auxDataFiltered = auxDataFiltered.filter(filterCb[key],filter[key])
-        })
+    const resetFilter = ()=>{
         setFilter(initialFilter);
-        setDataFiltered(auxDataFiltered);
     }
 
     return {
         filter,
-        dataFiltered,
         handleChange,
         handleChangeMult,
-        handleExecute
+        resetFilter
     };
 }
 

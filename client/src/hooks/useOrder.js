@@ -1,46 +1,22 @@
 import { useState } from "react";
 
-export const useFilter = (initialFilter,filterCb,data)=>{
+export const useOrder = (initialOrder)=>{
     
-    const [filter,setFilter] = useState(initialFilter);
-    const [dataFiltered, setDataFiltered] = useState(data);
-
-    if(dataFiltered===false && data.length>0){
-        setDataFiltered(data);
-    }
+    const [order,setOrder] = useState(initialOrder);
 
     // Events delegates
     const handleChange = (e) =>{
-        setFilter({
-            ...filter,
-            [e.target.name]:e.target.value
-        });
+        setOrder(e.target.value);
     };
     
-    const handleChangeMult = (e) =>{
-        setFilter({
-            ...filter,
-            [e.target.name]:Array.from(e.target.selectedOptions, option => parseInt(option.value))
-        });
+    const resetOrder = ()=>{
+        setOrder(initialOrder);
     };
 
-    const handleExecute = (e)=>{
-        const filterKeys = Object.keys(initialFilter);
-        console.log(filter);
-        let auxDataFiltered = data;
-        filterKeys.forEach(key=>{
-            auxDataFiltered = auxDataFiltered.filter(filterCb[key],filter[key])
-        })
-        setFilter(initialFilter);
-        setDataFiltered(auxDataFiltered);
-    }
-
     return {
-        filter,
-        dataFiltered,
+        order,
         handleChange,
-        handleChangeMult,
-        handleExecute
+        resetOrder
     };
 }
 

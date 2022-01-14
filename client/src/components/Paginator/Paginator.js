@@ -1,9 +1,9 @@
 // Libraries
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 
 // Redux actions
-import { setGamesPaginated } from '../../redux/actions/actionsGames';
+import { paginateGames } from '../../redux/actions/actionsGames';
 
 // Custom hooks
 import { usePaginator } from '../../hooks/usePaginator';
@@ -24,31 +24,21 @@ const Paginator = () => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
 
-    // Customizing params for usePaginator
-    const elementsFirsPage = 15;
-    const elemensPerPage = 15;
-    const arrayToPaginate = state.games.gamesFiltered;
-    const arrayToPaginateLength = arrayToPaginate.length
-
+    // Params for usePaginator
+    const elementsFirsPage = state.games.pagination.firstPage;
+    const elemensPerPage = state.games.pagination.nextPages;
+    const arrayLength = state.games.gamesOrdered.length;
+    const paginatorCb = (page)=>dispatch(paginateGames(page));
     const {
         page, 
         maxPages,
         pageList, 
-        firstIndex, 
-        lastIndex,  
         isFirst, 
         isLast, 
         handlePrevious,
         handleNext,
         handleSelect
-    }= usePaginator(arrayToPaginateLength,elementsFirsPage,elemensPerPage)
-
-    // Update paginator global variable
-    useEffect(() => {
-        dispatch(setGamesPaginated(
-            arrayToPaginate.slice(firstIndex,lastIndex)
-        ));
-    }, [page,arrayToPaginateLength]);
+    }= usePaginator(arrayLength,elementsFirsPage,elemensPerPage,paginatorCb)
 
     return (
         <Paginator_Section>
@@ -61,9 +51,9 @@ const Paginator = () => {
                         bgInvert
                     >
                         {`<<`}
-                    </Paginator_Button>
-                    <PaginatorSelectWrapp> 
-                        <PaginatorSelectText>Page</PaginatorSelectText>
+                    </Paginator_Button>                    
+                    <PaginatorSelectWrapp anyProp={state.games.gamesOrdered.length}> 
+                        <PaginatorSelectText>Page:</PaginatorSelectText>
                         <PaginatorSelectDropdown name="select" onChange={handleSelect} value={page}>
                             {
                                 pageList.map(el=>(
@@ -73,7 +63,7 @@ const Paginator = () => {
                                 ))
                             }
                         </PaginatorSelectDropdown>
-                        <PaginatorSelectText>{` of ${maxPages}`}</PaginatorSelectText>
+                        <PaginatorSelectText>{`of ${maxPages}`}</PaginatorSelectText>
                     </PaginatorSelectWrapp>
                     <Paginator_Button 
                         name="next" 

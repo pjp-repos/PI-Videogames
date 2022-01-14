@@ -1,28 +1,16 @@
-//                       _oo0oo_
-//                      o8888888o
-//                      88" . "88
-//                      (| -_- |)
-//                      0\  =  /0
-//                    ___/`---'\___
-//                  .' \\|     |// '.
-//                 / \\|||  :  |||// \
-//                / _||||| -:- |||||- \
-//               |   | \\\  -  /// |   |
-//               | \_|  ''\---/''  |_/ |
-//               \  .-\__  '-'  ___/-. /
-//             ___'. .'  /--.--\  `. .'___
-//          ."" '<  `.___\_<|>_/___.' >' "".
-//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-//         \  \ `_.   \_ __\ /__ _/   .-` /  /
-//     =====`-.____`.___ \_____/___.-`___.-'=====
-//                       `=---='
-//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ==== server and database import
 const server = require('./src/app.js');
-const { conn } = require('./src/db.js');
+const { dbConn } = require('./src/db.js');
 
-// Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
-  });
-});
+// ------------------------ OPTIONS ------------------------------
+// # sync is an asynchronous function (Promese)
+// # dbConn.sync(arg) => Syncing all the models at once. 
+// # model.sync(arg) => synchronizes only one model
+// # arg = { force: true } => Drop all tables and information and redo it
+// # arg = { alter: true } => It makes only changes models vs database
+
+// - Synchronizing sequelize ORM with real dababase ---
+// await dbConn.sync({ force: true })
+// - Then ... Start express server
+server.listen(3001, () => {console.log('%s listening at 3001');});
+

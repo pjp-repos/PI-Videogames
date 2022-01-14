@@ -1,9 +1,22 @@
+// Imports
 import React from 'react';
-import { useFetch } from '../../../hooks/useFetch';
-import { useForm } from '../../../hooks/useForm';
-import { helpFieldValidate } from '../../../helpers/helpFieldValidate';
-import helpApiKey from '../../../helpers/helpApiKey';
+import { useSelector, useDispatch } from 'react-redux';
 
+// Redux actions
+import {
+    addGame,
+    addGameLoading,
+    addGameError
+} from '../../../redux/actions/actionsGames';
+
+// Custom hooks
+import { useForm } from '../../../hooks/useForm';
+
+//Helpers
+import { helpFieldValidate } from '../../../helpers/helpFieldValidate';
+import {helpFetch} from '../../../helpers/helpFetch';
+
+// Styled components
 import { 
     CreateFromForm,
     CreateFromInput,
@@ -70,18 +83,18 @@ const validationsForm = (form)=>{
 };
 
 
-const CreateForm = () => {
-    let apiKey = helpApiKey();
-    const genres = useFetch(`https://api.rawg.io/api/genres?key=${apiKey}`);
-    const platforms = useFetch(`https://api.rawg.io/api/platforms?key=${apiKey}`);
-
-    const loadingSelects = genres.loading || platforms.loading;
+const CreateForm = ({closeModal}) => {
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
+    
+    const dataCb = (data)=>dispatch(addGame(data));
+    const loadingCb = (value)=>dispatch(addGameLoading(value));
+    const errorCb = (errorObj)=>dispatch(addGameError(errorObj));
 
     const {        
         form,
         errors,
-        loading,
-        response,
+        error,
         handleChange,
         handleChangeMult,
         handleBlur,
@@ -89,10 +102,30 @@ const CreateForm = () => {
         handleSubmit
     } = useForm(initialForm, validationsForm);
     
-    if(loadingSelects) return <Spinner/>;
+    const handleExecuteForm = (e)=>{
+        handleSubmit(e);
+        if(!error){
+            helpFetch(`http://localhost:3001/videogame`,  dataCb, loadingCb, errorCb,{
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                method:'POST',
+                body:form
+            });
+            closeModal();
+        }
+    };
+
+    if(
+        state.games.loadings.genres 
+        || state.games.loadings.genres
+        || state.games.loadings.platforms
+        || state.games.loadings.addGame
+    ) return <Spinner/>;
+
     return (
         <>
-            <CreateFromForm action ={'d0a4c5cda45898c3229fa0335cef2bdf'} onSubmit={handleSubmit}>
+            <CreateFromForm action ={'d0a4c5cda45898c3229fa0335cef2bdf'} onSubmit={handleExecuteForm}>
                 <CreateFromInput 
                     type="text" 
                     name="name"
@@ -156,7 +189,7 @@ const CreateForm = () => {
                     required
                     >
                     {
-                        genres.data.results.map((el)=>
+                        state.games.genres.map((el)=>
                         <CreateFormOption key={el.id} value={el.id}>
                                 {el.name}
                             </CreateFormOption>
@@ -174,7 +207,7 @@ const CreateForm = () => {
                     required
                     >
                     {
-                        platforms.data.results.map((el)=>
+                        state.games.platforms.map((el)=>
                         <CreateFormOption key={el.id} value={el.id}>
                                 {el.name}
                             </CreateFormOption>

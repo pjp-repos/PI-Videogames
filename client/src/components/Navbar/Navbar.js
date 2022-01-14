@@ -1,13 +1,21 @@
 // Libraries
-import React, {useEffect} from 'react'
-import {useSelector,useDispatch} from 'react-redux';
+import React from 'react'
+import {useDispatch} from 'react-redux';
 import {FaBars} from 'react-icons/fa'
+import { Link } from "react-router-dom";
 
 // Redux actions
-import { setGamesFiltered } from '../../redux/actions/actionsGames';
+import { 
+    setGames,
+    setGamesLoading,
+    setGamesError 
+} from '../../redux/actions/actionsGames';
 
 // Custom hooks
 import { useFilter } from '../../hooks/useFilter';
+
+// Helpers
+import { helpFetch } from '../../helpers/helpFetch';
 
 // Styled components
 import {
@@ -24,46 +32,43 @@ import {
 import { Button } from '../AaaGenerics/Button/Button'
 import Container from '../AaaGenerics/Sections/Container'
 
-import PokeText from "../../assets/joystickYellow.png"
-
-// Helpers
-import { 
-    filterCbNameInclude
-} from '../../helpers/helpFilterCallbacks';
+import navLogo from "../../assets/joystickYellow.png"
 
 const initialFilter = {
     name:""
 };
 
-const filterCb = {
-    name:filterCbNameInclude
-};
-
 const Navbar = ({toggle, openFilter, openOrder, openCreate}) => {
     // Redux
-    const state = useSelector(state => state);
     const dispatch = useDispatch();
-
+    const dataCb = (data)=>dispatch(setGames(data));
+    const loadingCb = (value)=>dispatch(setGamesLoading(value));
+    const errorCb = (errorObj)=>dispatch(setGamesError(errorObj));
+    
     // useFilter custom hook
     const {      
         filter,
-        dataFiltered,
         handleChange,
-        handleExecute
-    } = useFilter(initialFilter,filterCb,state.games.games);
+        resetFilter,
+    } = useFilter(initialFilter);
     
-    // Update gamesFiltered global variable
-    useEffect(() => {
-        dispatch(setGamesFiltered(
-            dataFiltered
-        ));
-    }, [dataFiltered]);
+    const handleExecuteFilter = async()=>{
+
+        if(filter.name===""){
+            helpFetch(`http://localhost:3001/videogames`,  dataCb, loadingCb, errorCb);
+        }else{
+            helpFetch(`http://localhost:3001/videogames?name=${filter.name}`,  dataCb, loadingCb, errorCb);
+        }        
+        resetFilter();
+    };
 
     return (
         <Nav_SectionSticky>
             <Container>
                 <NavWrapper>
-                    <NavLogo bgimage = {PokeText} to="/"/>
+                    <Link to="/">
+                        <NavLogo src = {navLogo} alt="logo"/>
+                    </Link>
                     <NavMenu>
                         <NavMenuItem onClick={openFilter} >Filter</NavMenuItem>                                          
                         <NavMenuItem onClick={openOrder} >Order</NavMenuItem>
@@ -77,10 +82,10 @@ const Navbar = ({toggle, openFilter, openOrder, openCreate}) => {
                             onChange={handleChange}
                         />
                         <Button
-                            onClick={handleExecute}
+                            onClick={handleExecuteFilter}
                         >
                             {
-                                filter.name===""?"View all":"Search"
+                                filter.name===""?"Reset":"Search"
                             }                            
                         </Button> 
                     </NavSearchWrap> 

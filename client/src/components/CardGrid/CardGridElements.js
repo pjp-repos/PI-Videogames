@@ -18,4 +18,12 @@ export const CardGridWrapper = styled.div`
     }
 `;
 
-
+export const CardGridLoaderWrapper = styled.div`
+    width: 100vw;
+    height: 82vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+`;

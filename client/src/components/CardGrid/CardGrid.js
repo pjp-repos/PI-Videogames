@@ -3,12 +3,20 @@ import React, {useEffect} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 
 // Redux actions
-import { setGames,setGamesFiltered } from '../../redux/actions/actionsGames';
+import { 
+    setGames, 
+    setGamesLoading,
+    setGamesError, 
+    setGenres, 
+    setGenresLoading,
+    setGenresError, 
+    setPlatforms, 
+    setPlatformsLoading,
+    setPlatformsError, 
+} from '../../redux/actions/actionsGames';
 
-// Custom hooks
-import { useFetch } from '../../hooks/useFetch';
-
-import helpApiKey from '../../helpers/helpApiKey';
+// Helpers
+import {helpFetch} from '../../helpers/helpFetch'
 
 // Styled components (external)
 import SectionRelative from '../AaaGenerics/Sections/SectionRelative';
@@ -21,45 +29,40 @@ import Card from './Card/Card';
 // Styled components (internal)
 import { 
     CardGridWrapper,
+    CardGridLoaderWrapper
 } from './CardGridElements';
-
 
 const CardGrid = ({showModalInfo}) => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
+    // Games
+    const dataCbGames = (data)=>dispatch(setGames(data));
+    const loadingCbGames = (value)=>dispatch(setGamesLoading(value));
+    const errorCbGames = (errorObj)=>dispatch(setGamesError(errorObj));
+    // Genres
+    const dataCbGenres = (data)=>dispatch(setGenres(data));
+    const loadingCbGenres = (value)=>dispatch(setGenresLoading(value));
+    const errorCbGenres = (errorObj)=>dispatch(setGenresError(errorObj));
+    // Platforms
+    const dataCbPlatforms = (data)=>dispatch(setPlatforms(data));
+    const loadingCbPlatforms = (value)=>dispatch(setPlatformsLoading(value));
+    const errorCbPlatforms = (errorObj)=>dispatch(setPlatformsError(errorObj));
 
-    let games = state.games.gamesPaginated;
-   
-    let apiKey = helpApiKey();
-    const page1 = useFetch(`https://api.rawg.io/api/games?key=${apiKey}&page=1`);
-    const page2 = useFetch(`https://api.rawg.io/api/games?key=${apiKey}&page=2`);
-    const page3 = useFetch(`https://api.rawg.io/api/games?key=${apiKey}&page=3`);
-    const page4 = useFetch(`https://api.rawg.io/api/games?key=${apiKey}&page=4`);
-    const page5 = useFetch(`https://api.rawg.io/api/games?key=${apiKey}&page=5`);
-
-    let loading = page1.loading || page2.loading || page3.loading || page4.loading || page5.loading;
-    
     useEffect(() => {
-        let data =[];
-        if (!loading){
-            data = page1.data.results.concat(
-                page2.data.results,
-                page3.data.results,
-                page4.data.results,
-                page5.data.results
-            );
-        };
-        dispatch(setGames(data));
-        dispatch(setGamesFiltered(data));
+        helpFetch(`http://localhost:3001/videogames`,  dataCbGames, loadingCbGames, errorCbGames);
+        helpFetch(`http://localhost:3001/genres`,  dataCbGenres, loadingCbGenres, errorCbGenres);
+        helpFetch(`http://localhost:3001/platforms`,  dataCbPlatforms, loadingCbPlatforms, errorCbPlatforms);
+    }, [])
 
-    }, [loading])
-
-    if (loading) return(
+  
+    if (state.games.loadings.games) return(
         <SectionRelative>
             <SectionBgGradient/>
             <SectionBgVideo/>
             <Container flexDir="column">
-                <Spinner/>            
+                <CardGridLoaderWrapper>
+                    <Spinner/>
+                </CardGridLoaderWrapper>
             </Container>
         </SectionRelative>
     )    
@@ -72,7 +75,7 @@ const CardGrid = ({showModalInfo}) => {
             <Container flexDir="column">                
                 <CardGridWrapper>
                     {
-                        games.map((game)=>{
+                        state.games.gamesPaginated.map((game)=>{
                             
                                 let genresString = ""
                                 game.genres.forEach(el =>{
@@ -85,7 +88,7 @@ const CardGrid = ({showModalInfo}) => {
                                     name={game.name} 
                                     image = {game.background_image}
                                     genres = {genresString.slice(1)}
-                                    showModalInfo={()=>showModalInfo({gameId:game.id})}
+                                    showModalInfo={showModalInfo}
                                 />
                             )
                         })

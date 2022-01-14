@@ -19,18 +19,24 @@ export const NavWrapper = styled.div`
     z-index:1;  
 
 `;
-export const NavLogo = styled.div`
-    height: 70%;
-    width: 30%;
-    cursor: pointer;
-    background-image: url(${(props)=>props.bgimage});
-    background-repeat:no-repeat;
-    background-size:contain;
-    transition: opacity 0.5s ease;
-    &:hover{        
-        opacity: .75;
-    }
+export const NavLogo = styled.img`
+  width: 70px;
+  height: auto;
+
+  object-fit: cover;
+  object-position: center top;
+
+  border-radius: 10px;
+  opacity: .65;
+  background: transparent;
+  transition: all 0.5s ease-in-out;
+  &:hover{      
+      transform: scale(1.05,1.05);
+      opacity:1;
+      cursor: pointer;
+  }
 `;
+
 
 export const MobileIcon = styled.div`    
     display: block; 

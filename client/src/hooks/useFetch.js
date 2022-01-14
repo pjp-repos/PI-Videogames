@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useFetch = (url, options = {}) => {
+export const useFetch = (url, options = {},dispatchCb=false) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,6 +29,7 @@ export const useFetch = (url, options = {}) => {
                 if(!signal.aborted){
                     setData(json);
                     setError(null);
+                    if(dispatchCb!==false) dispatchCb(json);
                 }
             } catch (error) {
                 // Si el error no es por abort controller...

@@ -48,7 +48,9 @@ export const PaginatorSelectDropdown = styled.select`
     border: none;
     margin-left: 10px;
     -webkit-scrollbar-track: black;
-
+    &:hover{
+        cursor: pointer;
+    }
     option {
         color: white;
         background: black;

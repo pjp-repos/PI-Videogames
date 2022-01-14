@@ -1,12 +1,11 @@
 // Libraries
-import React, {useEffect} from 'react';
-import {useSelector,useDispatch} from 'react-redux';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Redux actions
-import { setGamesFiltered } from '../../../redux/actions/actionsGames';
+import { filterGames } from '../../../redux/actions/actionsGames';
 
 // Custom hooks
-import { useFetch } from '../../../hooks/useFetch';
 import { useFilter } from '../../../hooks/useFilter';
 
 // Styled components
@@ -19,61 +18,36 @@ import {
 } from "./FilterPanelElements";
 import Spinner from '../../AaaGenerics/Loaders/Spinner/Spinner';
 
-// Helpers
-import { 
-    filterCbNameInclude,
-    filterCbRatingMin,
-    filterCbRatingMax,
-    filterCbGenres,
-    filterCbPlatforms 
-} from '../../../helpers/helpFilterCallbacks';
-import helpApiKey from '../../../helpers/helpApiKey';
-
 
 const initialFilter = {
     name:"",
-    ratingMin:0,
-    ratingMax:999,
+    ratingMin:"",
+    ratingMax:"",
     genres:[],
     platforms:[]
 }
 
-const filterCb = {
-    name:filterCbNameInclude,
-    ratingMin:filterCbRatingMin,
-    ratingMax:filterCbRatingMax,
-    genres:filterCbGenres,
-    platforms:filterCbPlatforms
-}
   
-const FilterPanel = () => {
+const FilterPanel = ({closeModal}) => {
     // Redux
-    const state = useSelector(state => state);
-    const dispatch = useDispatch();    
-    
-    // Fetch genres and platforms for select lists
-    let apiKey = helpApiKey();
-    const genres = useFetch(`https://api.rawg.io/api/genres?key=${apiKey}`);
-    const platforms = useFetch(`https://api.rawg.io/api/platforms?key=${apiKey}`);
-
-    const loadingSelects = genres.loading || platforms.loading;
+    const state = useSelector(state => state);   
+    const dispatch = useDispatch();
 
     // useFilter custom hook
-    const {      
-        dataFiltered,
+    const {
+        filter,      
         handleChange,
         handleChangeMult,
-        handleExecute
-    } = useFilter(initialFilter,filterCb,state.games.games);
+        resetFilter,
+    } = useFilter(initialFilter);
 
-    // Update gamesFiltered global variable
-    useEffect(() => {
-        dispatch(setGamesFiltered(
-            dataFiltered
-        ));
-    }, [dataFiltered]);
+    const handleExecuteFilter = ()=>{
+        dispatch(filterGames(filter));
+        resetFilter();
+        closeModal();
+    };
 
-    if(loadingSelects) return <Spinner/>;
+    if(state.games.loadings.genres || state.games.loadings.platforms) return <Spinner/>;
 
     return (
         <>
@@ -81,53 +55,68 @@ const FilterPanel = () => {
                 <FilterPanelInput 
                     type="text" 
                     name="name"
+                    value = {filter.name}
                     placeholder='name...'
                     onChange={handleChange}
                 />
                 <FilterPanelInput 
                     type="text" 
                     name="ratingMin"
+                    value = {filter.ratingMin}
                     placeholder='minimum rating...'
                     onChange={handleChange}
                 />
                 <FilterPanelInput 
                     type="text" 
                     name="ratingMax"
+                    value = {filter.ratingMax}
                     placeholder='Maximum rating...'
                     onChange={handleChange}
                 />
 
                 <FilterPanelSelect 
                     name="genres"
-                    // value={form.genres}
                     multiple
                     onChange={handleChangeMult}
                     >
                     {
-                        genres.data.results.map((el)=>
-                        <FilterPanelOption key={el.id} value={el.id}>
-                            {el.name}
-                        </FilterPanelOption>
-                        )
-                    }
+                        state.games.genres.map((el)=>{
+                            return filter.genres.includes(el.id)
+                                ?
+                                <FilterPanelOption key={el.id} value={el.id} selected>
+                                    {el.name}
+                                </FilterPanelOption>
+                                :
+                                <FilterPanelOption key={el.id} value={el.id}>
+                                    {el.name}
+                                </FilterPanelOption>
+                            
+                        })
+                    }                    
                 </FilterPanelSelect>
 
                 <FilterPanelSelect 
                     name="platforms"
-                    // value={form.platforms}
                     multiple
                     onChange={handleChangeMult}
                     >
                     {
-                        platforms.data.results.map((el)=>
-                            <FilterPanelOption key={el.id} value={el.id}>
-                                {el.name}
-                            </FilterPanelOption>
-                        )
+                        state.games.platforms.map((el)=>{
+                            return filter.platforms.includes(el.id)
+                                ?
+                                <FilterPanelOption key={el.id} value={el.id} selected>
+                                    {el.name}
+                                </FilterPanelOption>
+                                :
+                                <FilterPanelOption key={el.id} value={el.id}>
+                                    {el.name}
+                                </FilterPanelOption>
+                            
+                        })
                     }
                 </FilterPanelSelect>
 
-                <FilterPanelButton onClick={handleExecute}>
+                <FilterPanelButton onClick={handleExecuteFilter}>
                     Filter
                 </FilterPanelButton>
             </FilterPanelWrapper>

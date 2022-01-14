@@ -1,36 +1,36 @@
 
 // Field "name" of element is exact value
-export const filterCbNameCs = function(el){
-    return el.name===this || this==="";
+export const filterCbNameCs = (el,param) =>{
+    return el.name===param || param==="";
 }
 
 // Field "name" of element is exact value no case sensitive
-export const filterCbName = function(el){
-    return el.name.toLowerCase()===this.toLowerCase() || this==="";
+export const filterCbName = (el,param) =>{
+    return el.name.toLowerCase()===param.toLowerCase() || param==="";
 }
 
 // Field "name" of element is included in value - CS
-export const filterCbNameIncludeCs = function(el){
-    return el.name.includes(this) || this==="";
+export const filterCbNameIncludeCs = (el,param) =>{
+    return el.name.includes(param) || param==="";
 }
 
 // Field "name" of element is included in value - no CS
-export const filterCbNameInclude = function(el){
-    return el.name.toLowerCase().includes(this.toLowerCase()) || this==="";
+export const filterCbNameInclude = (el,param) =>{
+    return el.name.toLowerCase().includes(param.toLowerCase()) || param==="";
 }
 
 // Field "rating" of element is higher than value
-export const filterCbRatingMin = function(el){
-    return el.rating >= this || this===0;
+export const filterCbRatingMin = (el,param) =>{
+    return el.rating >= param || param==="";
 }
 
 // Field "rating" of element is less than value
-export const filterCbRatingMax = function(el){
-    return el.rating <= this || this===0;
+export const filterCbRatingMax = (el,param) =>{
+    return el.rating <= param || param==="";
 }
 
 // Any of values in "value" array, exists in array el.genres.id
-export const filterCbGenres = function(el){
+export const filterCbGenres = (el,param) =>{
     const scanArrays = (array1,array2,i1,i2)=>{
         if(array2.length===0) return true; // There is no filter
         if(array1.length===0) return false; // There is filter but there is no data in array
@@ -44,11 +44,11 @@ export const filterCbGenres = function(el){
         } 
         return scanArrays(array1,array2,i1,i2);
     }
-    return scanArrays(el.genres, this, 0, 0);
+    return scanArrays(el.genres, param, 0, 0);
 }
 
 // Any of values in "value" array, exists in array el.platforms.platform.id
-export const filterCbPlatforms = function(el){
+export const filterCbPlatforms = (el,param) =>{
     const scanArrays = (array1,array2,i1,i2)=>{
         if(array2.length===0) return true; // There is no filter
         if(array1.length===0) return false; // There is filter but there is no data in array
@@ -62,5 +62,5 @@ export const filterCbPlatforms = function(el){
         } 
         return scanArrays(array1,array2,i1,i2);
     }
-    return scanArrays(el.platforms, this, 0, 0);
+    return scanArrays(el.platforms, param, 0, 0);
 }
