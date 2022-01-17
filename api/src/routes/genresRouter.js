@@ -12,13 +12,15 @@ const genresRouter = express.Router();
 
 genresRouter.get('/', async(req,res)=>{    
     try {
+        let data =[];
         // Fetching....
         const axiosGet = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
         
         // Select id, name from Genre 
-        const data = await Genre.findAll({
+        data = await Genre.findAll({
             attributes:['id', 'name']
         });
+
         console.log(`axios len: ${axiosGet.data.results.length} findAll len ${data.length}`)
         if (axiosGet.data.results.length!==data.length){
             // Formating data
@@ -33,8 +35,9 @@ genresRouter.get('/', async(req,res)=>{
             
             // Insert into Genres values (dadaFormated)
             await Genre.bulkCreate(dataFormated);
+
             // Select id, name from Genre 
-            const data = await Genre.findAll({
+            data = await Genre.findAll({
                 attributes:['id', 'name']
             });
         }

@@ -19,11 +19,59 @@ const videogameRouter = express.Router();
 videogameRouter.get('/:idVideogame',async(req,res)=>{
     const idVideogame = req.params.idVideogame;
     try {
-        const axiosGet = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
-        
-        const data = axiosGet.data;
+        let data =[];
+        if(isNaN(idVideogame)){
+            // JOIN = eagle loading
+            data = await Game.findByPk(idVideogame,{
+                attributes:[
+                    'id',
+                    'name',
+                    'background_image',
+                    'rating',
+                    'released',
+                    'description_raw'
+                ],
+                include:[
+                    {
+                        model:Genre,
+                        as:'genres',
+                        attributes:['id','name'],
+                        through: {attributes: []}
+                    },
+                    {
+                        model:Platform,
+                        as:'platforms',
+                        attributes:['id','name'], 
+                        through: {attributes: []}
+                    }
+                ]
+            });
+        }else{
+            const axiosGet = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
+            
+            data = {
+                id: axiosGet.data.id,
+                name: axiosGet.data.name,
+                background_image:axiosGet.data.background_image,
+                rating: axiosGet.data.rating,
+                released: axiosGet.data.released,
+                description_raw: axiosGet.data.description_raw,
+                genres: axiosGet.data.genres.map(el=>{
+                    return {
+                        id: el.id,
+                        name: el.name,
+                    }
+                }),
+                platforms: axiosGet.data.platforms.map(el=>{
+                    return {
+                        id: el.platform.id,
+                        name: el.platform.name,
+                    }
+                }),
+            }         
+        }
         res.status(200).json(data); 
-
+        
     } catch (error) {
         res.status(404).send(`Ocurrio el error: ${error.toString()}`)
     }
@@ -73,12 +121,6 @@ videogameRouter.post('/', async (req,res)=>{
                     attributes:['id','name'],
                     through: {attributes: []}
                 },
-                // {
-                //     model:Platform,
-                //     as:'platforms',
-                //     attributes:['id','name'], 
-                //     through: {attributes: []}
-                // }
             ]
         });
             
