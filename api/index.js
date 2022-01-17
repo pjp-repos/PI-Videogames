@@ -12,5 +12,8 @@ const { dbConn } = require('./src/db.js');
 // - Synchronizing sequelize ORM with real dababase ---
 // await dbConn.sync({ force: true })
 // - Then ... Start express server
-server.listen(3001, () => {console.log('%s listening at 3001');});
 
+server.listen(3001, async() => {
+    await dbConn.sync({ alter: true })
+    console.log('%s listening at 3001');
+});

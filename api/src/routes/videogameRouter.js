@@ -1,11 +1,12 @@
-// - Requires ---------------------------------
+// - Packages ---------------------------------
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-// const models = require("../models/Videogame");
-
+// - Models -----------------------------------
+const {Game, Genre, Platform} = require("../db");
+// - Settings ---------------------------------
 const {API_KEY} = process.env;
-
+// - Express router ---------------------------
 const videogameRouter = express.Router();
 
 
@@ -33,52 +34,58 @@ videogameRouter.get('/:idVideogame',async(req,res)=>{
 // de la ruta de creación de videojuego por body
 // Crea un videojuego en la base de datos
 
-videogameRouter.post('/',(req,res)=>{
-    const name = req.body.name;
-    const released = req.body.released;
-    const image = req.body.image;
-    const rating = req.body.rating;
-    const description = req.body.description;
-    const genres = req.body.genres;
-    const platforms = req.body.platforms
-    const formOk = 
-        name!=="" &&
-        released !== "" &&
-        image !== "" &&
-        parseFloat(rating)>0 &&
-        parseFloat(rating)<5 &&
-        image !== "" &&
-        description !== "" &&
-        Array.isArray(genres) &&
-        Array.isArray(platforms)
-    
-    try {
-        const formOk = 
-        name &&
-        released &&
-        image &&
-        parseFloat(rating)>0 &&
-        parseFloat(rating)<5 &&
-        image  &&
-        description  &&
-        Array.isArray(genres) &&
-        Array.isArray(platforms)
+videogameRouter.post('/', async (req,res)=>{
+    const form = req.body;
+    console.log(form)
+    try {   
+        const formForGame = {...form};
+        delete formForGame.genres;
+        delete formForGame.platforms;
 
-        if(formOk){
-            const form= {
-                id:`db${Math.ceil(Math.random()*10000)}`,
-                name,
-                background_image:image,
-                genres:genres.map(el=>{
-                    return {"id":el,"name":el}
-                })
-            };
-            res.status(200).json(form);
-        }else{
-            res.status(404).send(`Incorrect form content`)
-        }        
+        //Insert into Game values(formForGame)
+        const newRow = await Game.create(formForGame);
+
+        //Insert into Game_Genre values(form.genres)
+        await newRow.addGenre(form.genres);
+
+        //Insert into Game_Platform values(form.platforms)
+        await newRow.addPlatform(form.platforms);
+        
+        // Select * from  Game 
+        //      OUTER JOIN Game_Genre ON Game.id=Game_Genre.GameId 
+        //      INNER JOIN Genre ON Genre.id=Game_Genre.GenreId 
+        //      OUTER JOIN Game_Platform ON Game.id=Game_PLatform.PlatformId 
+        //      INNER JOIN Platform ON Platform.id=Game_Platform.PlatformId 
+        //      WHERE Game.id = newRow.id
+
+        // JOIN = eagle loading
+        const newId = await newRow.getDataValue('id');
+        const response = await Game.findByPk(newId,{
+            attributes:[
+                'id',
+                'name',
+                'background_image'
+            ],
+            include:[
+                {
+                    model:Genre,
+                    as:'genres',
+                    attributes:['id','name'],
+                    through: {attributes: []}
+                },
+                // {
+                //     model:Platform,
+                //     as:'platforms',
+                //     attributes:['id','name'], 
+                //     through: {attributes: []}
+                // }
+            ]
+        });
+            
+        res.status(200).json(response);
+         
     } catch (error) {
-        res.status(404).send(`Errror form `)
+        res.status(404).send(error.message)
     }
 });
 
