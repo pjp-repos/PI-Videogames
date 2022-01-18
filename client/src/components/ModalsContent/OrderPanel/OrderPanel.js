@@ -3,7 +3,10 @@ import React from 'react';
 import { useDispatch} from 'react-redux';
 
 // Redux actions
-import { orderGames } from '../../../redux/actions/actionsGames';
+import { 
+    orderGames,
+    setModal 
+} from '../../../redux/actions/actionsGames';
 
 // Custom hooks
 import { useOrder } from '../../../hooks/useOrder';
@@ -29,10 +32,10 @@ const orderList = [
     {value:"releasedDesc",text:"Order by released date descending"},
 ];
 
-const OrderPanel = ({closeModal}) => {
+const OrderPanel = () => {
     // Redux
     const dispatch = useDispatch();    
-    
+    const closeModal=()=>dispatch(setModal({modal:'orderPanel',value:false}));
     // useOrder custom hook
     const {   
         order,   
@@ -64,6 +67,9 @@ const OrderPanel = ({closeModal}) => {
 
                 <OrderPanelButton onClick={handleExecuteOrder}>
                     Order
+                </OrderPanelButton>
+                <OrderPanelButton onClick={closeModal}>
+                    Cancel/Close
                 </OrderPanelButton>
             </OrderPanelWrapper>
         </>

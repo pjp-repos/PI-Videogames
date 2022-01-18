@@ -47,12 +47,12 @@ export const filterCbGenres = (el,param) =>{
     return scanArrays(el.genres, param, 0, 0);
 }
 
-// Any of values in "value" array, exists in array el.platforms.platform.id
+// Any of values in "value" array, exists in array el.platforms.id
 export const filterCbPlatforms = (el,param) =>{
     const scanArrays = (array1,array2,i1,i2)=>{
         if(array2.length===0) return true; // There is no filter
         if(array1.length===0) return false; // There is filter but there is no data in array
-        if(array1[i1].platform.id===array2[i2]) return true;
+        if(array1[i1].id===array2[i2]) return true;
         if(i1===array1.length-1 && i2===array2.length-1) return false;
         if(i2===array2.length-1){
             i1=i1+1;

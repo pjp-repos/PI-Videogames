@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-export const usePaginator = (totalElements,elementsFirstPage,elementsPerPage, paginatorCb=false)=>{
+export const usePaginator = (totalElements,elementsFirstPage,elementsPerPage, paginatorCb=false, resetPage)=>{
     const [page,setPage] = useState(1);
+    const [reset,setReset] = useState(resetPage);
     
     // Max pages calculation
     let maxPages = Math.ceil(
@@ -9,8 +10,9 @@ export const usePaginator = (totalElements,elementsFirstPage,elementsPerPage, pa
         : ((totalElements-elementsFirstPage)/elementsPerPage)+1
     )
     // Reset page in filters
-    if(page>maxPages){
-        setPage(1);
+    if(page>maxPages || reset!==resetPage){
+        if(page!==1) setPage(1);
+        setReset(resetPage);
     }
 
     // Page list 

@@ -5,7 +5,7 @@ const axios = require('axios');
 const { Op } = require('sequelize'); 
 
 // - Models -----------------------------------
-const {Game, Genre} = require("../db");
+const {Game, Genre, Platform} = require("../db");
 // - Settings ---------------------------------
 const {API_KEY} = process.env;
 // - Express router ---------------------------
@@ -43,7 +43,19 @@ videogamesRouter.get('/', async (req,res)=>{
                                 id: el.id,
                                 name: el.name,
                                 background_image: el.background_image,
-                                genres: el.genres
+                                rating: el.rating,
+                                genres: el.genres.map(g=>{
+                                    return {
+                                        id: g.id,
+                                        name: g.name,
+                                    }
+                                }),
+                                platforms: el.platforms.map(p=>{
+                                    return {
+                                        id: p.platform.id,
+                                        name: p.platform.name,
+                                    }
+                                }),
                             }
                         });
                         dataApi = [...dataApi,...auxData];
@@ -58,7 +70,8 @@ videogamesRouter.get('/', async (req,res)=>{
                     attributes:[
                         'id',
                         'name',
-                        'background_image'
+                        'background_image',
+                        'rating'
                     ],
                     include:[
                         {
@@ -67,6 +80,12 @@ videogamesRouter.get('/', async (req,res)=>{
                             attributes:['id','name'],
                             through: {attributes: []}
                         },
+                        {
+                            model:Platform,
+                            as:'platforms',
+                            attributes:['id','name'],
+                            through: {attributes: []}
+                        }
                     ],
                     where:{
                         name:{
@@ -80,7 +99,8 @@ videogamesRouter.get('/', async (req,res)=>{
                     attributes:[
                         'id',
                         'name',
-                        'background_image'
+                        'background_image',
+                        'rating'
                     ],
                     include:[
                         {
@@ -89,6 +109,12 @@ videogamesRouter.get('/', async (req,res)=>{
                             attributes:['id','name'],
                             through: {attributes: []}
                         },
+                        {
+                            model:Platform,
+                            as:'platforms',
+                            attributes:['id','name'], 
+                            through: {attributes: []}
+                        }
                     ]
                 });
                 dataDb = response;

@@ -10,12 +10,12 @@ import { usePaginator } from '../../hooks/usePaginator';
 
 // Styled components
 import {
-    Paginator_Section,
+    PaginatorSection,
     PaginatorWrapper,
     PaginatorSelectWrapp,
     PaginatorSelectText,
     PaginatorSelectDropdown,
-    Paginator_Button
+    PaginatorButton
 } from './PaginatorElements'
 import Container from '../AaaGenerics/Sections/Container';
 
@@ -27,7 +27,9 @@ const Paginator = () => {
     // Params for usePaginator
     const elementsFirsPage = state.games.pagination.firstPage;
     const elemensPerPage = state.games.pagination.nextPages;
+    const resetPage = state.games.pagination.resetPage;
     const arrayLength = state.games.gamesOrdered.length;
+
     const paginatorCb = (page)=>dispatch(paginateGames(page));
     const {
         page, 
@@ -38,20 +40,20 @@ const Paginator = () => {
         handlePrevious,
         handleNext,
         handleSelect
-    }= usePaginator(arrayLength,elementsFirsPage,elemensPerPage,paginatorCb)
+    }= usePaginator(arrayLength,elementsFirsPage,elemensPerPage,paginatorCb, resetPage)
 
     return (
-        <Paginator_Section>
+        <PaginatorSection>
             <Container>
                 <PaginatorWrapper>
-                    <Paginator_Button 
+                    <PaginatorButton 
                         name="previous" 
                         isDisabled={isFirst} 
                         onClick={handlePrevious}
                         bgInvert
                     >
                         {`<<`}
-                    </Paginator_Button>                    
+                    </PaginatorButton>                    
                     <PaginatorSelectWrapp anyProp={state.games.gamesOrdered.length}> 
                         <PaginatorSelectText>Page:</PaginatorSelectText>
                         <PaginatorSelectDropdown name="select" onChange={handleSelect} value={page}>
@@ -65,17 +67,17 @@ const Paginator = () => {
                         </PaginatorSelectDropdown>
                         <PaginatorSelectText>{`of ${maxPages}`}</PaginatorSelectText>
                     </PaginatorSelectWrapp>
-                    <Paginator_Button 
+                    <PaginatorButton 
                         name="next" 
                         isDisabled={isLast} 
                         onClick={handleNext}
                         bgInvert
                     >
                         {`>>`}
-                    </Paginator_Button>
+                    </PaginatorButton>
                 </PaginatorWrapper>
             </Container>
-        </Paginator_Section>
+        </PaginatorSection>
     )
 }; 
 

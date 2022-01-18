@@ -1,5 +1,4 @@
-// Custom hooks and helpers
-import { useModal } from '../hooks/useModal';
+import { useSelector } from 'react-redux';
 
 // Styled components
 import Navbar from "../components/Navbar/Navbar";
@@ -11,46 +10,37 @@ import InfoCard from '../components/ModalsContent/InfoCard/InfoCard';
 import CreateForm from '../components/ModalsContent/CreateForm/CreateForm';
 import FilterPanel from '../components/ModalsContent/FilterPanel/FilterPanel';
 import OrderPanel from '../components/ModalsContent/OrderPanel/OrderPanel';
+import Spinner from '../components/AaaGenerics/Loaders/Spinner/Spinner';
+
 
 function Main() {
-   
-    // === Modal hooks ==== 
-    const sidebar = useModal();
-    const modalFilter = useModal();
-    const modalOrder = useModal();
-    const modalCreate = useModal();
-    const modalInfo = useModal();
+    const state = useSelector(state => state)
 
     return (
         <>
-            {/* <GlobalStyle/>  */}
-            <Sidebar isOpen={sidebar.isOpen} toggle={sidebar.closeModal}
-                openFilter={modalFilter.openModal} 
-                openOrder={modalOrder.openModal}
-                openCreate={modalCreate.openModal}
-            />
-            <Navbar toggle={sidebar.openModal} 
-                openFilter={modalFilter.openModal} 
-                openOrder={modalOrder.openModal}
-                openCreate={modalCreate.openModal}
-            />
+            <Sidebar/>
+            <Navbar />
             <Paginator/>
-            <CardGrid showModalInfo={modalInfo.openModal}/>               
+            <CardGrid/>               
 
-            <Modal show={modalFilter.isOpen} closeModal={modalFilter.closeModal}>
-                <FilterPanel closeModal={modalFilter.closeModal}/>
+            <Modal show={state.games.modals.filterPanel}>
+                <FilterPanel/>
             </Modal> 
 
-            <Modal show={modalOrder.isOpen} closeModal={modalOrder.closeModal}>
-                <OrderPanel closeModal={modalOrder.closeModal}/>
+            <Modal show={state.games.modals.orderPanel}>
+                <OrderPanel/>
             </Modal>
 
-            <Modal show={modalCreate.isOpen} closeModal={modalCreate.closeModal}>
-                <CreateForm closeModal={modalCreate.closeModal}/>
+            <Modal show={state.games.modals.createForm}>
+                <CreateForm/>
             </Modal> 
 
-            <Modal show={modalInfo.isOpen} closeModal={modalInfo.closeModal}>
+            <Modal show={state.games.modals.infoCard}>
                 <InfoCard/>
+            </Modal>
+
+            <Modal show={state.games.modals.loader}>
+                <Spinner/>
             </Modal> 
         </> 
     );

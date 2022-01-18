@@ -1,34 +1,47 @@
 import { useState } from "react";
 
-//,filterCb,data,dispatchFilter, closeModal=false
-export const useFilter = (initialFilter)=>{
+export const useFilter = (initialForm, validateForm, submitForm)=>{
     
-    const [filter,setFilter] = useState(initialFilter);
+    const [form,setForm] = useState(initialForm);
+    const [errors, setErrors] = useState({});
+    //const [error, setError] = useState(false);
 
     // Events delegates
     const handleChange = (e) =>{
-        setFilter({
-            ...filter,
+        setForm({
+            ...form,
             [e.target.name]:e.target.value
         });
     };
-    
-    const handleChangeMult = (e) =>{
-        setFilter({
-            ...filter,
-            [e.target.name]:Array.from(e.target.selectedOptions, option => parseInt(option.value))
+
+    const handleDropdown = (fieldName,value) =>{
+        setForm({
+            ...form,
+            [fieldName]:value
         });
     };
+    
+    const handleSubmit = () =>{
+        const auxErrors = validateForm(form)
+        setErrors(auxErrors);
+        if(Object.keys(auxErrors).length===0){
+            submitForm(form);
+            return true;
+        }
+        return false;
+    };
 
-    const resetFilter = ()=>{
-        setFilter(initialFilter);
+    const resetFields = ()=>{
+        setForm(initialForm);
     }
 
     return {
-        filter,
+        form,
+        errors,
         handleChange,
-        handleChangeMult,
-        resetFilter
+        handleDropdown,
+        handleSubmit,
+        resetFields
     };
 }
 

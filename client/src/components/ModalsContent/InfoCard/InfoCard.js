@@ -1,11 +1,13 @@
 // Libraries
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+// Actions
+import { setModal } from '../../../redux/actions/actionsGames';
 
 // Styled components
 import { H3 } from '../../AaaGenerics/Texts/Hx';
 import {P,Pscroll} from '../../AaaGenerics/Texts/P';
-import Spinner from '../../AaaGenerics/Loaders/Spinner/Spinner'
+
 import {
     CardWrapper,
     CardImage
@@ -13,16 +15,16 @@ import {
 
 const InfoCard = () => {
     const state = useSelector(state => state);
-
-    if(state.games.loadings.game) return <Spinner/>;
-
+    const dispatch = useDispatch();
+    const closeModal=()=>dispatch(setModal({modal:'infoCard',value:false}));
+   
     return (
         <>
             <CardWrapper>
                 <H3>{state.games.game.name}</H3>    
-                <CardImage src={state.games.game.background_image}/>
+                <CardImage src={state.games.game.background_image} onClick={closeModal}/>
                 <P>{state.games.game.infoString}</P>               
-                <Pscroll>{state.games.game.description_raw}</Pscroll>               
+                <Pscroll>{state.games.game.description_raw}</Pscroll>           
             </CardWrapper>
         </>
     )

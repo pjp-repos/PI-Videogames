@@ -61,6 +61,10 @@ export const ModalcloseBtn = styled(MdClose)`
     right: 20px;
     z-index:999;
 
+    display: ${
+        ({closeBtn})=>(closeBtn ? 'block' : 'none' )
+    };
+    
     fill: var(--first-color);
     cursor: pointer;
 

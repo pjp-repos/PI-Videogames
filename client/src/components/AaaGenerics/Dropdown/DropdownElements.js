@@ -1,48 +1,83 @@
 import styled from "styled-components";
+import { Button } from "../Button/Button";
 
 export const DropDownContainer = styled("div")`
-  width: 10.5em;
-  margin: 0 auto;
-  position: relative;
+    padding-right: 10px;
+    position: relative;
+    overflow: visible;
 `;
 
-export const DropDownHeader = styled("div")`
-  margin-bottom: 0.8em;
-  padding: 0.4em 2em 0.4em 1em;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-  font-weight: 500;
-  font-size: 1.3rem;
-  color: #3faffa;
-  background: #ffffff;
+export const DropDownButton = styled(Button)`
+    min-width: 100px;
+    max-width: 90vw;
+    
+    border-bottom-left-radius: ${
+        ({show})=>(show ? '10px' : '50px' )
+    };
+    border-bottom-right-radius: ${
+        ({show})=>(show ? '10px' : '50px' )
+    };
 `;
 
 export const DropDownListContainer = styled.div`
+    min-width: 100px;
+    max-width: 90vw;
+    max-height:200px;
+    padding: 1rem;
+    border: 2px solid var(--first-color);
+
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index:1000;
+    top:110%;
+    left:0;
+    z-index: 997;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;    
+    align-items: center;
+
+    border-radius: 10px;
+    background-color: black;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 10px rgba(255,255,255,0.5); 
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 10px rgba(255,255,255,0.3); 
+    }
+    transition: 0.1s ease-in-out;   
+    display: ${
+        ({show})=>(show ? 'flex' : 'none' )
+    };
 `;
 
-export const DropDownList = styled.div`
-    padding: 0;
-    margin: 0;
-    padding-left: 1em;
-    background: #ffffff;
-    border: 2px solid #e5e5e5;
-    color: #3faffa;
-    font-size: 1.3rem;
-    font-weight: 500;
-    display: grid;
-    grid-template-columns: repeat(5,1fr);
-    grid-gap: 5px;
-  &:first-child {
-    padding-top: 0.8em;
-  }
-`;
 
-export const ListItem = styled.div`
-  list-style: none;
-  margin: 0.8em;
-  cursor: pointer;
-  border: thin solid black;
+export const DropDownListItem = styled.div`
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    white-space: nowrap;
+    background-color: ${
+            ({isSelected})=>(isSelected ? 'var(--first-color)' : 'transparent' )
+        };
+    &:hover{
+        border-bottom: 2px solid var(--first-color);
+    }
 `;

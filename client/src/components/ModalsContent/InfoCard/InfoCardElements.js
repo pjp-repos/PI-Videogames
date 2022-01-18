@@ -17,10 +17,10 @@ export const CardWrapper = styled.div`
 export const CardImage = styled.img`
     width:100%;
     height: 100%;
-    
+    align-items: center;
     object-fit: cover;
     object-position: center top;
-    
+    cursor: pointer;
     border-radius: 8px;
 `;
 

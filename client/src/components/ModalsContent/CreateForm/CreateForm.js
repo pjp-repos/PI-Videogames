@@ -6,11 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     addGame,
     addGameLoading,
-    addGameError
+    addGameError,
+    setModal
 } from '../../../redux/actions/actionsGames';
 
 // Custom hooks
-import { useForm } from '../../../hooks/useForm';
+import { useFilter } from '../../../hooks/useFilter';
 
 //Helpers
 import { helpFieldValidate } from '../../../helpers/helpFieldValidate';
@@ -18,63 +19,63 @@ import {helpFetch} from '../../../helpers/helpFetch';
 
 // Styled components
 import { 
-    CreateFromForm,
+    CreateFormWrapper,
     CreateFromInput,
-    CreateFormSelect,
-    CreateFormOption,
     CreateFormTextArea,
-    CreateFormError
+    CreateFormError,
  } from './CreateFormElements';
-import Spinner from '../../AaaGenerics/Loaders/Spinner/Spinner';
+import Dropdown from '../../AaaGenerics/Dropdown/Dropdown';
+import { Button } from '../../AaaGenerics/Button/Button';
 
-
+// Filed names width default values
 const initialForm = {
     name:"",
     released:"",
-    image:"",
+    background_image:"",
     rating:"",
-    description:"",
+    description_raw:"",
     genres:[],
     platforms:[]
 };
 
+// Field validations callback for useForm 
 const validationsForm = (form)=>{
     let errors={};
-
+    // name:
     if(!form.name.trim()){
         errors.name="Name is required";
     }else if(!helpFieldValidate('ChNuBlEs',form.name.trim())){
         errors.name="Name only acepts characters and numbers";
     }
-
+    // released:
     if(!form.released.trim()){
         errors.released="Released date is required";
     }else if(!helpFieldValidate('Date',form.released.trim())){
         errors.name="Invalid date format";
     }
-
-    if(!form.image.trim()){
-        errors.image="Image url is required";
-    }else if(!helpFieldValidate('UrlHttp',form.image.trim())){
-        errors.image="Invalid url. It must start width http/https.";
+    // background_image
+    if(!form.background_image.trim()){
+        errors.background_image="Image url is required";
+    }else if(!helpFieldValidate('UrlHttp',form.background_image.trim())){
+        errors.background_image="Invalid url. It must start width http/https.";
     }
-
+    // rating"""
     if(!form.rating.trim()){
         errors.rating="Rating is required";
     }else if(!helpFieldValidate('Float',form.rating.trim())){
         errors.rating="Invalid number.";
     }
-
-    if(!form.description.trim()){
-        errors.description="Description is required";
-    }else if(!helpFieldValidate('ChNuBlDoEs',form.description.trim())){
-        errors.description="Invalid simbols";
+    // description_raw:
+    if(!form.description_raw.trim()){
+        errors.description_raw="Description is required";
+    }else if(!helpFieldValidate('ChNuBlDoEs',form.description_raw.trim())){
+        errors.description_raw="Invalid simbols";
     }
-
+    // genres:
     if(form.genres.length===0){
         errors.genres="Chose one genre at least";
     }
-
+    // platforms:
     if(form.platforms.length===0){
         errors.platforms="Chose one platform at least";
     }
@@ -82,145 +83,173 @@ const validationsForm = (form)=>{
     return errors;
 };
 
-
-const CreateForm = ({closeModal}) => {
+const CreateForm = () => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
     
     const dataCb = (data)=>dispatch(addGame(data));
     const loadingCb = (value)=>dispatch(addGameLoading(value));
     const errorCb = (errorObj)=>dispatch(addGameError(errorObj));
+    
+    const closeModal = ()=>dispatch(setModal({modal:'createForm', value:false}));
 
+    // Submit form callback for useForm
+    const submitForm= (form)=>{ 
+        helpFetch(`http://localhost:3001/videogame`, dataCb, loadingCb, errorCb,{
+            headers:{
+                "Content-Type": "application/json"
+            },
+            method:'POST',
+            body:form
+        });    
+    };
+
+    // Dropdows option list
+    const genres = state.games.genres.map(el=>{
+        return{
+            key: el.id,
+            value: el.name
+        }
+    });
+
+    const platforms = state.games.platforms.map(el=>{
+        return{
+            key: el.id,
+            value: el.name
+        }
+    });
+
+    // custom hook useForm
     const {        
         form,
         errors,
-        error,
         handleChange,
-        handleChangeMult,
-        handleBlur,
-        handleBlurMult,
-        handleSubmit
-    } = useForm(initialForm, validationsForm);
-    
-    const handleExecuteForm = (e)=>{
-        handleSubmit(e);
-        if(!error){
-            helpFetch(`http://localhost:3001/videogame`,  dataCb, loadingCb, errorCb,{
-                headers:{
-                    "Content-Type": "application/json"
-                },
-                method:'POST',
-                body:form
-            });
+        handleDropdown,
+        handleSubmit,
+        resetFields
+    } = useFilter(initialForm, validationsForm, submitForm);
+
+    const handleExecute= ()=>{
+        if(handleSubmit()){
+            resetFields();
             closeModal();
         }
     };
-
+    
     if(
         state.games.loadings.genres 
         || state.games.loadings.genres
         || state.games.loadings.platforms
         || state.games.loadings.addGame
-    ) return <Spinner/>;
+    ) return null;
 
     return (
         <>
-            <CreateFromForm action ={'d0a4c5cda45898c3229fa0335cef2bdf'} onSubmit={handleExecuteForm}>
+            <CreateFormWrapper>
+                {/* Game name field */}
                 <CreateFromInput 
                     type="text" 
                     name="name"
                     placeholder='Write the name of the game...'
-                    // value={form.name}
+                    value={form.name}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                     required
                 />
-                {errors.name && <CreateFormError>{errors.name}</CreateFormError>}
+                <CreateFormError>
+                    {errors.name && errors.name}
+                </CreateFormError>
 
+                {/* Released date field */}
                 <CreateFromInput 
                     type="date" 
                     name="released"
                     placeholder='Type released date...'
-                    // value={form.released}
+                    value={form.released}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                     required
                 />
-                 {errors.date && <CreateFormError>{errors.date}</CreateFormError>}
-
+                <CreateFormError>
+                    {errors.released && errors.released}
+                </CreateFormError>
+ 
+                {/* Background image field */}
                 <CreateFromInput 
                     type="url" 
-                    name="image"
+                    name="background_image"
                     placeholder='Type the image url...'
-                    // value={form.image}
+                    value={form.background_image}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                     required
-                    />
-                {errors.image && <CreateFormError>{errors.image}</CreateFormError>}
-                
+                />
+                <CreateFormError>
+                    {errors.background_image && errors.background_image}
+                </CreateFormError>
+
+                {/* Rating field */}
                 <CreateFromInput 
                     type="number" 
                     name="rating"
                     placeholder='Type rating...'
-                    // value={form.rating}
+                    value={form.rating}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                     required
-                    />
-                {errors.rating && <CreateFormError>{errors.rating}</CreateFormError>}
-
-                <CreateFormTextArea
-                    name="description"
-                    placeholder='Type description..'
-                    // value={form.description}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    />
-                {errors.description && <CreateFormError>{errors.description}</CreateFormError>}
-
-                <CreateFormSelect 
-                    name="genres"
-                    // value={form.genres}
-                    multiple
-                    onChange={handleChangeMult}
-                    onBlur={handleBlurMult}
-                    required
-                    >
-                    {
-                        state.games.genres.map((el)=>
-                        <CreateFormOption key={el.id} value={el.id}>
-                                {el.name}
-                            </CreateFormOption>
-                        )
-                    }
-                </CreateFormSelect>
-                {errors.genres && <CreateFormError>{errors.genres}</CreateFormError>}
-
-                <CreateFormSelect 
-                    name="platforms"
-                    // value={form.platforms}
-                    multiple
-                    onChange={handleChangeMult}
-                    onBlur={handleBlurMult}
-                    required
-                    >
-                    {
-                        state.games.platforms.map((el)=>
-                        <CreateFormOption key={el.id} value={el.id}>
-                                {el.name}
-                            </CreateFormOption>
-                        )
-                    }
-                </CreateFormSelect>
-                {errors.platforms && <CreateFormError>{errors.platforms}</CreateFormError>}
-
-                <CreateFromInput 
-                    type="submit" 
-                    value="Submit"
                 />
-            </CreateFromForm>
+                <CreateFormError>
+                    {errors.rating && errors.rating}
+                </CreateFormError>
+
+                {/* Description field */}
+                <CreateFormTextArea
+                    name="description_raw"
+                    placeholder='Type description..'
+                    value={form.description_raw}
+                    onChange={handleChange}
+                    required
+                />
+                <CreateFormError>
+                    {errors.description_raw && errors.description_raw}
+                </CreateFormError>
+
+                {/* Genres select dropdown */}
+                <Dropdown 
+                    titleOn="Genres"
+                    titleOff="Close"
+                    options={genres}
+                    multiple={true}
+                    
+                    fieldName='genres'
+                    fieldValue={form.genres}
+                    dropdownCb={handleDropdown}
+                />
+                <CreateFormError>
+                    {errors.genres && errors.genres}
+                </CreateFormError>
+
+                {/* Platforms select dropdown */}
+                <Dropdown 
+                    titleOn="Platforms"
+                    titleOff="Close"
+                    options={platforms}
+                    multiple={true}
+                    
+                    fieldName='platforms'
+                    fieldValue={form.platforms}
+                    dropdownCb={handleDropdown}
+                />
+                <CreateFormError>
+                    {errors.platforms && errors.platforms}
+                </CreateFormError>
+               
+                <Button onClick={handleExecute}>
+                    Submit
+                </Button>
+                <Button onClick={closeModal}>
+                    Cancel/Close
+                </Button> 
+                <Button onClick={resetFields}>
+                    Clear fields
+                </Button> 
+            </CreateFormWrapper>        
         </>
     )   
 }

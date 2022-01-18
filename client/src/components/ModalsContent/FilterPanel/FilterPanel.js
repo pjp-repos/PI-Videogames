@@ -3,7 +3,10 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 // Redux actions
-import { filterGames } from '../../../redux/actions/actionsGames';
+import { 
+    filterGames,
+    setModal 
+} from '../../../redux/actions/actionsGames';
 
 // Custom hooks
 import { useFilter } from '../../../hooks/useFilter';
@@ -11,15 +14,13 @@ import { useFilter } from '../../../hooks/useFilter';
 // Styled components
 import {
     FilterPanelWrapper,
-    FilterPanelInput,
-    FilterPanelSelect,
-    FilterPanelOption,
-    FilterPanelButton
+    FilterPanelInput
 } from "./FilterPanelElements";
-import Spinner from '../../AaaGenerics/Loaders/Spinner/Spinner';
+import Dropdown from '../../AaaGenerics/Dropdown/Dropdown';
+import { Button } from '../../AaaGenerics/Button/Button';
 
-
-const initialFilter = {
+// Fields and default values
+const initialForm = {
     name:"",
     ratingMin:"",
     ratingMax:"",
@@ -27,27 +28,51 @@ const initialFilter = {
     platforms:[]
 }
 
+// Field validations
+const validationsForm = (form)=>{
+    let errors={};
+    return errors;
+};
   
-const FilterPanel = ({closeModal}) => {
+const FilterPanel = () => {
     // Redux
     const state = useSelector(state => state);   
     const dispatch = useDispatch();
+    const closeModal=()=>dispatch(setModal({modal:'filterPanel',value:false}));
+    const submitForm=()=>dispatch(filterGames(form));
 
-    // useFilter custom hook
-    const {
-        filter,      
+    // Dropdows option list
+    const genres = state.games.genres.map(el=>{
+        return{
+            key: el.id,
+            value: el.name
+        }
+    });
+
+    const platforms = state.games.platforms.map(el=>{
+        return{
+            key: el.id,
+            value: el.name
+        }
+    });
+
+    // Custom hook useForm
+    const {        
+        form,
         handleChange,
-        handleChangeMult,
-        resetFilter,
-    } = useFilter(initialFilter);
+        handleDropdown,
+        handleSubmit,
+        resetFields
+    } = useFilter(initialForm, validationsForm, submitForm);
 
-    const handleExecuteFilter = ()=>{
-        dispatch(filterGames(filter));
-        resetFilter();
-        closeModal();
+    const handleExecute = ()=>{
+        if(handleSubmit()){
+            resetFields();
+            closeModal();
+        };
     };
 
-    if(state.games.loadings.genres || state.games.loadings.platforms) return <Spinner/>;
+    if(state.games.loadings.genres || state.games.loadings.platforms) return null;
 
     return (
         <>
@@ -55,70 +80,56 @@ const FilterPanel = ({closeModal}) => {
                 <FilterPanelInput 
                     type="text" 
                     name="name"
-                    value = {filter.name}
+                    value = {form.name}
                     placeholder='name...'
                     onChange={handleChange}
                 />
                 <FilterPanelInput 
                     type="text" 
                     name="ratingMin"
-                    value = {filter.ratingMin}
+                    value = {form.ratingMin}
                     placeholder='minimum rating...'
                     onChange={handleChange}
                 />
                 <FilterPanelInput 
                     type="text" 
                     name="ratingMax"
-                    value = {filter.ratingMax}
+                    value = {form.ratingMax}
                     placeholder='Maximum rating...'
                     onChange={handleChange}
                 />
 
-                <FilterPanelSelect 
-                    name="genres"
-                    multiple
-                    onChange={handleChangeMult}
-                    >
-                    {
-                        state.games.genres.map((el)=>{
-                            return filter.genres.includes(el.id)
-                                ?
-                                <FilterPanelOption key={el.id} value={el.id} selected>
-                                    {el.name}
-                                </FilterPanelOption>
-                                :
-                                <FilterPanelOption key={el.id} value={el.id}>
-                                    {el.name}
-                                </FilterPanelOption>
-                            
-                        })
-                    }                    
-                </FilterPanelSelect>
+                <Dropdown 
+                    titleOn="Genres"
+                    titleOff="Close"
+                    options={genres}
+                    multiple={true}
+                    
+                    fieldName='genres'
+                    fieldValue={form.genres}
+                    dropdownCb={handleDropdown}
+                /> 
 
-                <FilterPanelSelect 
-                    name="platforms"
-                    multiple
-                    onChange={handleChangeMult}
-                    >
-                    {
-                        state.games.platforms.map((el)=>{
-                            return filter.platforms.includes(el.id)
-                                ?
-                                <FilterPanelOption key={el.id} value={el.id} selected>
-                                    {el.name}
-                                </FilterPanelOption>
-                                :
-                                <FilterPanelOption key={el.id} value={el.id}>
-                                    {el.name}
-                                </FilterPanelOption>
-                            
-                        })
-                    }
-                </FilterPanelSelect>
+                <Dropdown 
+                    titleOn="Platforms"
+                    titleOff="Close"
+                    options={platforms}
+                    multiple={true}
+                    
+                    fieldName='platforms'
+                    fieldValue={form.platforms}
+                    dropdownCb={handleDropdown}
+                />
 
-                <FilterPanelButton onClick={handleExecuteFilter}>
+                <Button onClick={handleExecute}>
                     Filter
-                </FilterPanelButton>
+                </Button>
+                <Button onClick={closeModal}>
+                    Cancel/Close
+                </Button>
+                <Button onClick={resetFields}>
+                    Clear fields
+                </Button> 
             </FilterPanelWrapper>
         </>
     )

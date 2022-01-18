@@ -23,6 +23,8 @@ export const FILTER_GAMES="FILTER_GAMES";
 export const ORDER_GAMES="ORDER_GAMES";
 export const PAGINATE_GAMES="PAGINATE_GAMES";
 
+export const SET_MODAL="SET_MODAL";
+
 
 
 

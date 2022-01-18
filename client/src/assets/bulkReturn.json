@@ -1,0 +1,439 @@
+[
+    Genre {
+      dataValues: {
+        id: 4,
+        name: 'Action',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 4,
+        name: 'Action',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 51,
+        name: 'Indie',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 51,
+        name: 'Indie',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 3,
+        name: 'Adventure',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 3,
+        name: 'Adventure',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 5,
+        name: 'RPG',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 5,
+        name: 'RPG',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 10,
+        name: 'Strategy',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 10,
+        name: 'Strategy',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 2,
+        name: 'Shooter',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 2,
+        name: 'Shooter',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 40,
+        name: 'Casual',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 40,
+        name: 'Casual',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 14,
+        name: 'Simulation',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 14,
+        name: 'Simulation',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 7,
+        name: 'Puzzle',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 7,
+        name: 'Puzzle',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 11,
+        name: 'Arcade',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 11,
+        name: 'Arcade',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 83,
+        name: 'Platformer',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 83,
+        name: 'Platformer',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 1,
+        name: 'Racing',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 1,
+        name: 'Racing',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 59,
+        name: 'Massively Multiplayer',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 59,
+        name: 'Massively Multiplayer',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 15,
+        name: 'Sports',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 15,
+        name: 'Sports',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 6,
+        name: 'Fighting',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 6,
+        name: 'Fighting',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 19,
+        name: 'Family',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 19,
+        name: 'Family',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 28,
+        name: 'Board Games',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 28,
+        name: 'Board Games',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 34,
+        name: 'Educational',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 34,
+        name: 'Educational',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    },
+    Genre {
+      dataValues: {
+        id: 17,
+        name: 'Card',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      _previousDataValues: {
+        id: 17,
+        name: 'Card',
+        createdAt: 2022-01-14T20:25:30.799Z,
+        updatedAt: 2022-01-14T20:25:30.799Z
+      },
+      uniqno: 1,
+      _changed: Set(0) {},
+      _options: {
+        isNewRecord: true,
+        _schema: null,
+        _schemaDelimiter: '',
+        include: undefined
+      },
+      isNewRecord: false
+    }
+  ]

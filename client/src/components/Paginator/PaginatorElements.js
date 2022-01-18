@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {Button} from "../AaaGenerics/Button/Button";
 import Section from '../AaaGenerics/Sections/SectionRelative'
 
-export const Paginator_Section = styled(Section)`
+export const PaginatorSection = styled(Section)`
     background-color: black;
 `;
 
@@ -16,7 +16,7 @@ export const PaginatorWrapper = styled.div`
     background-color: transparent;
 `;
 
-export const Paginator_Button = styled(Button)`
+export const PaginatorButton = styled(Button)`
     cursor: ${({isDisabled}) => (isDisabled ? "no-drop" : "pointer")};    
 `;
 

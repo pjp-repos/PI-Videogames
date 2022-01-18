@@ -2,41 +2,50 @@ import React, { useState } from "react";
 
 import {
     DropDownContainer,
-    DropDownHeader,
+    DropDownButton,
     DropDownListContainer,
-    DropDownList,
-    ListItem
+    DropDownListItem
 } from './DropdownElements'
 
 
-const Dropdown = ({options}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+const Dropdown = ({options, fieldName, fieldValue, titleOn, titleOff, multiple, dropdownCb}) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-  const toggling = () => setIsOpen(!isOpen);
+    let values = []
+    if(multiple) values = fieldValue;
+    else values.push(fieldValue);
 
-  const onOptionClicked = value => () => {
-    setSelectedOption(value);
-    setIsOpen(false);
-    console.log(selectedOption);
-  };
+    const onOptionClicked = (key) => {
+        if(multiple){
+            const index = values.findIndex(el=>el===key);
+            if(index===-1){
+                dropdownCb(fieldName,[...values,key]);
+            }else{
+                dropdownCb(fieldName,values.filter(el=>el!==key));
+            }
+        } 
+        else{
+            dropdownCb(fieldName,key);
+            setIsOpen(!isOpen);
+        } 
+    };
 
   return (
     <DropDownContainer>
-        <DropDownHeader onClick={toggling}>
-            {selectedOption || "---"}
-        </DropDownHeader>
-        {isOpen && (
-            <DropDownListContainer>
-                <DropDownList>
+        <DropDownButton onClick={()=>setIsOpen(!isOpen)} show={isOpen}>
+            {isOpen?titleOff:titleOn}
+        </DropDownButton>   
+            <DropDownListContainer show={isOpen}>
                     {options.map(option => (
-                    <ListItem onClick={onOptionClicked(option.key)} key={Math.random()}>
-                        {option.value}
-                    </ListItem>
+                        <DropDownListItem
+                            key={option.key}
+                            isSelected={values.includes(option.key)}
+                            onClick={()=>onOptionClicked(option.key)} 
+                        >
+                            {option.value}
+                        </DropDownListItem>
                     ))}
-                </DropDownList>
             </DropDownListContainer>
-        )}
     </DropDownContainer>
   );
 }

@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import { 
     setGames,
     setGamesLoading,
-    setGamesError 
+    setGamesError,
+    setModal 
 } from '../../redux/actions/actionsGames';
 
 // Custom hooks
@@ -19,7 +20,7 @@ import { helpFetch } from '../../helpers/helpFetch';
 
 // Styled components
 import {
-    Nav_SectionSticky,
+    NavSectionRelative,
     NavWrapper,
     NavLogo,
     MobileIcon,
@@ -31,68 +32,99 @@ import {
 } from './NavbarElements'
 import { Button } from '../AaaGenerics/Button/Button'
 import Container from '../AaaGenerics/Sections/Container'
+import Dropdown from '../AaaGenerics/Dropdown/Dropdown';
 
 import navLogo from "../../assets/joystickYellow.png"
 
-const initialFilter = {
-    name:""
+// Filed names width default values
+const initialForm = {
+    name:"",
+    origin:'All', // Dropdown non multiple
 };
 
-const Navbar = ({toggle, openFilter, openOrder, openCreate}) => {
+// Field validations
+const validationsForm = (form)=>{
+    let errors={};
+    return errors;
+};
+
+const dropDownOptions = [
+    {key:'All',value:'Api & Db'},
+    {key:'Api',value:'Just Api'},
+    {key:'Db',value:'Just Db'},    
+]
+
+const Navbar = () => {
     // Redux
     const dispatch = useDispatch();
     const dataCb = (data)=>dispatch(setGames(data));
     const loadingCb = (value)=>dispatch(setGamesLoading(value));
     const errorCb = (errorObj)=>dispatch(setGamesError(errorObj));
     
+    const onClickIcon = ()=>dispatch(setModal({modal:'sidebar',state:true}));
+    const onClickFilter = ()=>dispatch(setModal({modal:'filterPanel',state:true}));
+    const onClickOrder = ()=>dispatch(setModal({modal:'orderPanel',state:true}));
+    const onClickCreate = ()=>dispatch(setModal({modal:'createForm',state:true}));
+
     // useFilter custom hook
     const {      
-        filter,
+        form,
         handleChange,
-        resetFilter,
-    } = useFilter(initialFilter);
+        handleDropdown,
+        resetFields,
+    } = useFilter(initialForm, validationsForm);
     
-    const handleExecuteFilter = async()=>{
-
-        if(filter.name===""){
-            helpFetch(`http://localhost:3001/videogames`,  dataCb, loadingCb, errorCb);
+    const handleExecute = async()=>{
+        console.log(form.origin);
+        if(form.name===""){ 
+            helpFetch(`http://localhost:3001/videogames?origin=${form.origin}`,  dataCb, loadingCb, errorCb);
         }else{
-            helpFetch(`http://localhost:3001/videogames?name=${filter.name}`,  dataCb, loadingCb, errorCb);
+            helpFetch(`http://localhost:3001/videogames?origin=${form.origin}&name=${form.name}`,  dataCb, loadingCb, errorCb);
         }        
-        resetFilter();
+        resetFields();
     };
 
     return (
-        <Nav_SectionSticky>
+        <NavSectionRelative>
             <Container>
                 <NavWrapper>
                     <Link to="/">
                         <NavLogo src = {navLogo} alt="logo"/>
                     </Link>
                     <NavMenu>
-                        <NavMenuItem onClick={openFilter} >Filter</NavMenuItem>                                          
-                        <NavMenuItem onClick={openOrder} >Order</NavMenuItem>
-                        <NavMenuItem onClick={openCreate} >Create</NavMenuItem>                        
+                        <NavMenuItem onClick={onClickFilter} >Filter</NavMenuItem>                                          
+                        <NavMenuItem onClick={onClickOrder} >Order</NavMenuItem>
+                        <NavMenuItem onClick={onClickCreate} >Create</NavMenuItem>                        
                     </NavMenu>
                     <NavSearchWrap> 
                         <NavSearchInput
                             type="text" 
                             name="name"
-                            value={filter.name}
+                            value={form.name}
                             onChange={handleChange}
                         />
+                        <Dropdown 
+                            options={dropDownOptions}
+                            titleOn="Origin"
+                            titleOff="Close"
+                            multiple={false}
+                            
+                            fieldName='origin'
+                            fieldValue = {form.origin}
+                            dropdownCb={handleDropdown}
+                        />
                         <Button
-                            onClick={handleExecuteFilter}
+                            onClick={handleExecute}
                         >
                             {
-                                filter.name===""?"Reset":"Search"
+                                form.name!==""||form.origin!=='All'?"Search":"Reload"
                             }                            
                         </Button> 
                     </NavSearchWrap> 
-                    <MobileIcon onClick={toggle}> <FaBars/> </MobileIcon>
+                    <MobileIcon onClick={onClickIcon}> <FaBars/> </MobileIcon>
                 </NavWrapper>
             </Container>
-        </Nav_SectionSticky>
+        </NavSectionRelative>
     )
 }
 

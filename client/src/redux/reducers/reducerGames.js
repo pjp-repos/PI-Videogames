@@ -17,6 +17,7 @@ import {
     FILTER_GAMES,
     ORDER_GAMES,
     PAGINATE_GAMES,
+    SET_MODAL
 } from "../types";
 
 // Helpers
@@ -47,7 +48,8 @@ const initialState = {
     platforms: [],
     pagination:{
         firstPage:15,
-        nextPages: 15
+        nextPages: 15,
+        resetPage: false
     },
     loadings:{
         games:false,
@@ -55,6 +57,7 @@ const initialState = {
         addGame:false,
         genres:false,
         platforms:false,
+        
     },
     errors:{
         games:{
@@ -77,6 +80,14 @@ const initialState = {
             status:false,
             statusText:""
         }
+    },
+    modals:{
+        sidebar: false,
+        infoCard: false,
+        filterPanel: false,
+        orderPanel: false,
+        createForm: false,
+        loader: false
     }
 };
 
@@ -105,7 +116,7 @@ const reducerGames = (state = initialState, action) => {
                 games:action.payload,
                 gamesFiltered:action.payload,
                 gamesOrdered:action.payload,
-                gamesPaginated:action.payload.slice(0,state.pagination.firstPage-1)
+                gamesPaginated:action.payload.slice(0,state.pagination.firstPage    )
             }
 
         case SET_GAMES_LOADING:
@@ -134,7 +145,7 @@ const reducerGames = (state = initialState, action) => {
         
             let platformsString = ""
             action.payload.platforms.forEach(el =>{
-                platformsString=platformsString.concat(" ", el.platform.name);
+                platformsString=platformsString.concat(" ", el.name);
             });
         
             const infoString = `
@@ -258,13 +269,19 @@ const reducerGames = (state = initialState, action) => {
             const filterKeys = Object.keys(filter);
             let dataFiltered = [...state.games];
             filterKeys.forEach(key=>{
-                dataFiltered = dataFiltered.filter((el)=>filterCallbacks[key](el,filter[key]))
+                let cb = filterCallbacks[key];
+                let param = filter[key];
+                dataFiltered = dataFiltered.filter((el)=>cb(el,param))
             })
             return {
                 ...state,
                 gamesFiltered:dataFiltered,
                 gamesOrdered:dataFiltered,
-                gamesPaginated:dataFiltered.slice(0,state.pagination.firstPage-1)
+                gamesPaginated:dataFiltered.slice(0,state.pagination.firstPage),
+                pagination :{
+                    ...state.pagination,
+                    resetPage: !state.pagination.resetPage
+                }
             }
 
         case ORDER_GAMES:
@@ -279,7 +296,11 @@ const reducerGames = (state = initialState, action) => {
             return {
                 ...state,
                 gamesOrdered:dataOrdered,
-                gamesPaginated:dataOrdered.slice(0,state.pagination.firstPage-1)
+                gamesPaginated:dataOrdered.slice(0,state.pagination.firstPage),
+                pagination :{
+                    ...state.pagination,
+                    resetPage: !state.pagination.resetPage
+                }
             }
 
         case PAGINATE_GAMES:
@@ -291,6 +312,14 @@ const reducerGames = (state = initialState, action) => {
                 gamesPaginated:state.gamesOrdered.slice(firstIndex,lastIndex)
             }
 
+        case SET_MODAL:
+            return {
+                ...state,
+                modals:{
+                    ...state.modals,
+                    [action.payload.modal]:action.payload.state
+                }
+            }    
         default:
             return {...state}
     }

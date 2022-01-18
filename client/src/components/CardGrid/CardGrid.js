@@ -13,26 +13,25 @@ import {
     setPlatforms, 
     setPlatformsLoading,
     setPlatformsError, 
+    setModal,
 } from '../../redux/actions/actionsGames';
 
 // Helpers
 import {helpFetch} from '../../helpers/helpFetch'
 
-// Styled components (external)
+// Styled components (Generics)
 import SectionRelative from '../AaaGenerics/Sections/SectionRelative';
 import SectionBgGradient from '../AaaGenerics/Sections/SectionBgGradient';
 import SectionBgVideo from '../AaaGenerics/Sections/SectionBgVideo';
 import Container from '../AaaGenerics/Sections/Container';
-import Spinner from '../AaaGenerics/Loaders/Spinner/Spinner';
 import Card from './Card/Card';
 
-// Styled components (internal)
+// Styled components 
 import { 
     CardGridWrapper,
-    CardGridLoaderWrapper
 } from './CardGridElements';
 
-const CardGrid = ({showModalInfo}) => {
+const CardGrid = () => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
     // Games
@@ -48,24 +47,17 @@ const CardGrid = ({showModalInfo}) => {
     const loadingCbPlatforms = (value)=>dispatch(setPlatformsLoading(value));
     const errorCbPlatforms = (errorObj)=>dispatch(setPlatformsError(errorObj));
 
-    useEffect(() => {
+    useEffect(() => {      
         helpFetch(`http://localhost:3001/videogames`,  dataCbGames, loadingCbGames, errorCbGames);
         helpFetch(`http://localhost:3001/genres`,  dataCbGenres, loadingCbGenres, errorCbGenres);
         helpFetch(`http://localhost:3001/platforms`,  dataCbPlatforms, loadingCbPlatforms, errorCbPlatforms);
     }, [])
 
-  
-    if (state.games.loadings.games) return(
-        <SectionRelative>
-            <SectionBgGradient/>
-            <SectionBgVideo/>
-            <Container flexDir="column">
-                <CardGridLoaderWrapper>
-                    <Spinner/>
-                </CardGridLoaderWrapper>
-            </Container>
-        </SectionRelative>
-    )    
+    useEffect(() => {    
+        dispatch(setModal({modal:'loader',state:state.games.loadings.games}))  
+    }, [state.games.loadings.games])
+
+    if (state.games.loadings.games)  return null;
 
     return (
 
@@ -88,7 +80,6 @@ const CardGrid = ({showModalInfo}) => {
                                     name={game.name} 
                                     image = {game.background_image}
                                     genres = {genresString.slice(1)}
-                                    showModalInfo={showModalInfo}
                                 />
                             )
                         })

@@ -1,5 +1,8 @@
 import React from 'react'
-
+import { useSelector, useDispatch } from 'react-redux';
+// Redux actions
+import { setModal } from '../../redux/actions/actionsGames';
+// Styled components
 import{
     SidebarContainer,
     CloseIcon,
@@ -7,29 +10,30 @@ import{
     SidebarWapper,
     SidebarMenu,
     SidebarItemBtn,
-    SidebarBtnWrap,
-    SidebarRoute
 } from './SidebarElements'
 
-const Sidebar = ({isOpen,toggle,openFilter, openOrder, openCreate}) => {
+const Sidebar = () => {
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
+    const onClickIcon = ()=>dispatch(setModal({modal:'sidebar',state:false}));
+    const onClickFilter = ()=>dispatch(setModal({modal:'filterPanel',state:true}));
+    const onClickOrder = ()=>dispatch(setModal({modal:'orderPanel',state:true}));
+    const onClickCreate = ()=>dispatch(setModal({modal:'createForm',state:true}));
     return (
-        <SidebarContainer isOpen={isOpen} >
-            <Icon onClick={toggle}>
+        <SidebarContainer isOpen={state.games.modals.sidebar} >
+            <Icon onClick={onClickIcon}>
                 <CloseIcon/>
             </Icon>
             <SidebarWapper>
                 <SidebarMenu>
-                    <SidebarItemBtn  onClick={openFilter}>
+                    <SidebarItemBtn  onClick={onClickFilter}>
                         Filter
                     </SidebarItemBtn>
-                    <SidebarItemBtn  onClick={openOrder}>
+                    <SidebarItemBtn  onClick={onClickOrder}>
                         Order                    
                     </SidebarItemBtn>
-                    <SidebarItemBtn onClick={openCreate}>
+                    <SidebarItemBtn onClick={onClickCreate}>
                         Create
-                    </SidebarItemBtn>
-                    <SidebarItemBtn >
-                        Sign Up
                     </SidebarItemBtn>
                 </SidebarMenu>
                 {/* <SidebarBtnWrap>

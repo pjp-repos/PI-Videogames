@@ -1,16 +1,14 @@
 import React from 'react'
 import{
     ModalBg,
-    ModalWrapper,
-    ModalcloseBtn
+    ModalWrapper
 } from './ModalElements'
 
-const Modal = ({show,closeModal,children}) => {
+const Modal = ({show,children}) => {
     // if(!show) return null;
     return (  
         <ModalBg show={show}>
             <ModalWrapper >
-                <ModalcloseBtn aria-label='Close' onClick={closeModal}/>   
                     {children}
             </ModalWrapper>
         </ModalBg>

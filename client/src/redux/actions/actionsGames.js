@@ -17,6 +17,7 @@ import {
     FILTER_GAMES,
     ORDER_GAMES,
     PAGINATE_GAMES,
+    SET_MODAL
 } from "../types";
 
 export const setGames = (payload)=>({type:SET_GAMES,payload});
@@ -43,6 +44,7 @@ export const filterGames = (payload)=>({type:FILTER_GAMES,payload});
 export const orderGames = (payload)=>({type:ORDER_GAMES,payload});
 export const paginateGames = (payload)=>({type:PAGINATE_GAMES,payload});
 
+export const setModal = (payload)=>({type:SET_MODAL,payload});
 
 
 

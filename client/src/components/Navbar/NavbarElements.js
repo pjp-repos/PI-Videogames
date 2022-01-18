@@ -1,10 +1,10 @@
-import styled, {css} from 'styled-components';
-import { Button } from '../AaaGenerics/Button/Button';
+import styled from 'styled-components';
 
 
 
-import Sectionsticky from '../AaaGenerics/Sections/SectionSticky';
-export const Nav_SectionSticky = styled(Sectionsticky)`
+
+import SectionRelative from '../AaaGenerics/Sections/SectionRelative';
+export const NavSectionRelative = styled(SectionRelative)`
     background-color: #000; 
     height: 80px;
 `
@@ -16,7 +16,7 @@ export const NavWrapper = styled.div`
     justify-content:space-between;
     align-items: center;
     height:80px;
-    z-index:1;  
+    /* z-index:1;   */
 
 `;
 export const NavLogo = styled.img`
@@ -100,4 +100,11 @@ export const NavSearchInput = styled.input`
     background: transparent;
     color:var(--white-color);
     font-size: 1rem;
+`;
+
+export const NavSearchLabel = styled.label`
+    padding-right: 10px;
+    color: white;
+    font-size: 1rem;
+    background-color: transparent;
 `;
