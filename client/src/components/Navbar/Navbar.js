@@ -13,7 +13,7 @@ import {
 } from '../../redux/actions/actionsGames';
 
 // Custom hooks
-import { useFilter } from '../../hooks/useFilter';
+import { useForm } from '../../hooks/useForm';
 
 // Helpers
 import { helpFetch } from '../../helpers/helpFetch';
@@ -72,7 +72,7 @@ const Navbar = () => {
         handleChange,
         handleDropdown,
         resetFields,
-    } = useFilter(initialForm, validationsForm);
+    } = useForm(initialForm, validationsForm);
     
     const handleExecute = async()=>{
         console.log(form.origin);
@@ -99,6 +99,7 @@ const Navbar = () => {
                     <NavSearchWrap> 
                         <NavSearchInput
                             type="text" 
+                            placeholder="Name include..."
                             name="name"
                             value={form.name}
                             onChange={handleChange}

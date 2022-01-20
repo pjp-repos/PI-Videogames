@@ -2,26 +2,33 @@ import styled from "styled-components";
 import { Button } from "../Button/Button";
 
 export const DropDownContainer = styled("div")`
-    padding-right: 10px;
+    width: 100%;
+    /* padding-right: 10px; */
     position: relative;
     overflow: visible;
+    
+    @media screen and (min-width: 768px){
+        width: 150px;
+    }
 `;
 
 export const DropDownButton = styled(Button)`
-    min-width: 100px;
-    max-width: 90vw;
-    
+    width: 100%;
     border-bottom-left-radius: ${
-        ({show})=>(show ? '10px' : '50px' )
+        ({show})=>(show ? '0' : '50px' )
     };
     border-bottom-right-radius: ${
-        ({show})=>(show ? '10px' : '50px' )
+        ({show})=>(show ? '0' : '50px' )
     };
+    &:hover{
+        background-color: var(--first-color);
+    }
 `;
 
 export const DropDownListContainer = styled.div`
-    min-width: 100px;
-    max-width: 90vw;
+    /* min-width: 100px;
+    max-width: 90vw; */
+    width: 100%;
     max-height:200px;
     padding: 1rem;
     border: 2px solid var(--first-color);
@@ -36,7 +43,8 @@ export const DropDownListContainer = styled.div`
     justify-content: start;    
     align-items: center;
 
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     background-color: black;
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -51,11 +59,11 @@ export const DropDownListContainer = styled.div`
     &::-webkit-scrollbar-thumb {
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 10px rgba(255,255,255,0.3); 
-    }
-    transition: 0.1s ease-in-out;   
+    }     
     display: ${
         ({show})=>(show ? 'flex' : 'none' )
     };
+
 `;
 
 
@@ -64,20 +72,21 @@ export const DropDownListItem = styled.div`
     margin-top: 5px;
     margin-bottom: 5px;
     padding: 5px;
+    border: 2px solid transparent;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 
     border-radius: 5px;
     cursor: pointer;
     color: white;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     background-color: ${
             ({isSelected})=>(isSelected ? 'var(--first-color)' : 'transparent' )
         };
     &:hover{
-        border-bottom: 2px solid var(--first-color);
+        border: 2px solid var(--first-color);
     }
 `;

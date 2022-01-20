@@ -7,10 +7,13 @@ export const CardWrapper = styled.div`
 
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 7.5% 60% 10% 20% ;
+    grid-template-rows: 17.5% 50% 10% 20% ;
     grid-row-gap: 3px;
     text-align: center;
     background-color: transparent; 
+    @media screen and (min-width: 768px){
+        grid-template-rows: 10% 57.5% 10% 20% ;
+    }
 `;
 
 

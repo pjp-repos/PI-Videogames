@@ -20,23 +20,6 @@ import {
     SET_MODAL
 } from "../types";
 
-// Helpers
-import { 
-    filterCbNameInclude,
-    filterCbRatingMin,
-    filterCbRatingMax,
-    filterCbGenres,
-    filterCbPlatforms 
-} from '../../helpers/helpFilterCallbacks';
-
-import { 
-    sortCbNameNcsAsc,
-    sortCbNameNcsDesc,
-    sortCbRatingAsc,
-    sortCbRatingDesc,
-    sortCbReleasedAsc,
-    sortCbReleasedDesc 
-} from '../../helpers/helpSortCallbacks';
 
 const initialState = {
     games: [],
@@ -91,22 +74,6 @@ const initialState = {
     }
 };
 
-const filterCallbacks = {
-    name:filterCbNameInclude,
-    ratingMin:filterCbRatingMin,
-    ratingMax:filterCbRatingMax,
-    genres:filterCbGenres,
-    platforms:filterCbPlatforms
-}
-
-const sortCallbacks = {
-    nameAsc:sortCbNameNcsAsc,
-    nameDesc:sortCbNameNcsDesc,
-    ratingAsc:sortCbRatingAsc,
-    ratingDesc:sortCbRatingDesc,
-    releasedAsc:sortCbReleasedAsc,
-    releasedDesc:sortCbReleasedDesc
-}
 
 const reducerGames = (state = initialState, action) => {
     switch (action.type) {
@@ -182,12 +149,17 @@ const reducerGames = (state = initialState, action) => {
             }
 
         case ADD_GAME:
+            let newGames = [action.payload,...state.games];
             return {
                 ...state,
-                games:state.games.push(action.payload),
-                gamesFiltered:state.games,
-                gamesOrdered:state.games,
-                gamesPaginated:state.games.slice(0,state.pagination.firstPage-1)
+                games: newGames,
+                gamesFiltered: newGames,
+                gamesOrdered: newGames,
+                gamesPaginated: newGames.slice(0,state.pagination.firstPage),
+                pagination :{
+                    ...state.pagination,
+                    resetPage: !state.pagination.resetPage
+                }
             }
 
         case ADD_GAME_LOADING:
@@ -260,17 +232,19 @@ const reducerGames = (state = initialState, action) => {
             // action.payload: filter (Object containing filter keys and values)
             // payload example: {
             //     name:'the',              // Name must content 'the'
-            //     ratingMin:0,             // No filter minimum rating
-            //     ratingMax:999,           // No filter maximum rating
+            //     ratingMin:3,             // Rating >3
+            //     ratingMax:4 ,           // Rating<4
             //     genres:[],               // No filter by genres
             //     platforms:['PC','Xbox']  // Games must include 'PC' or 'Xbox' platfom
             // }
-            const filter = action.payload;
-            const filterKeys = Object.keys(filter);
+            const filterForm = action.payload.form;
+            const filterCallbacks = action.payload.Cbs;
+
+            const filterKeys = Object.keys(filterForm);
             let dataFiltered = [...state.games];
             filterKeys.forEach(key=>{
                 let cb = filterCallbacks[key];
-                let param = filter[key];
+                let param = filterForm[key];
                 dataFiltered = dataFiltered.filter((el)=>cb(el,param))
             })
             return {
@@ -288,9 +262,10 @@ const reducerGames = (state = initialState, action) => {
             // action.payload: order (Key of the order rule to be applied)
             // payload example: "nameAsc" or "" if no order is required.
 
-            const order = action.payload;
+            const order = action.payload.form.order;
+            const sortCallbacks = action.payload.Cbs;
+
             let dataOrdered = [...state.gamesFiltered];
-            
             if(order!=="") dataOrdered.sort(sortCallbacks[order])
      
             return {

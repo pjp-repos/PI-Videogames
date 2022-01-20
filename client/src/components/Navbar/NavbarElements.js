@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 
-
-
-
 import SectionRelative from '../AaaGenerics/Sections/SectionRelative';
+import { Input } from '../AaaGenerics/Input';
+
 export const NavSectionRelative = styled(SectionRelative)`
     background-color: #000; 
     height: 80px;
-`
+`;
    
-
 export const NavWrapper = styled.div`
     width:100%;
     display:flex;
@@ -85,26 +83,23 @@ export const NavMenuItem = styled.button`
 `;
 
 export const NavSearchWrap = styled.div`
+    width: 420px;
     display: none;
-    flex-direction: row;
-    align-items: center;
+    justify-content: space-between;
+    align-items: center;     
     @media screen and (min-width:768px){
-        display: flex; 
+        display: flex;
+        
     }
 `;
 
-export const NavSearchInput = styled.input`
-    margin-right: 1rem;
-    border: none;
-    border-bottom: 2px solid var(--first-color);
-    background: transparent;
-    color:var(--white-color);
-    font-size: 1rem;
+export const NavSearchInput = styled(Input)`
+    max-width: 150px;
 `;
 
-export const NavSearchLabel = styled.label`
-    padding-right: 10px;
-    color: white;
-    font-size: 1rem;
-    background-color: transparent;
-`;
+// export const NavSearchLabel = styled.label`
+//     padding-right: 10px;
+//     color: white;
+//     font-size: 1rem;
+//     background-color: transparent;
+// `;

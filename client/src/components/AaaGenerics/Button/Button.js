@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 
 export const Button = styled.button`
+    width: 100%;
     padding: ${({big})=>( big ? '14px 48px' : '10px 20px' )};
     border: none;
     
@@ -22,6 +23,9 @@ export const Button = styled.button`
     transition: all 0.3s ease-in-out;
     &:hover{
         background: ${({bgInvert})=>( bgInvert ? 'var(--first-color)' : 'transparent' )};
+    }
+    @media screen and (min-width: 768px){
+        width: auto;
     }
 `;
 

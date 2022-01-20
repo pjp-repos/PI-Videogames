@@ -1,56 +1,49 @@
-import {useState} from 'react';
+import { useState } from "react";
 
-export const useForm = (initialForm, validateForm) => {
-    const [form, setForm] = useState(initialForm);
+export const useForm = (initialForm, validateForm, submitForm)=>{
+    
+    const [form,setForm] = useState(initialForm);
     const [errors, setErrors] = useState({});
-    const [error, setError] = useState(false);
+    //const [error, setError] = useState(false);
 
+    // Events delegates
     const handleChange = (e) =>{
-        const {name,value} = e.target;
         setForm({
             ...form,
-            [name]:value
-        })
+            [e.target.name]:e.target.value
+        });
     };
 
-    const handleChangeMult = (e) =>{
-        const value = Array.from(e.target.selectedOptions, option => option.value);
+    const handleDropdown = (fieldName,value) =>{
         setForm({
             ...form,
-            [e.target.name]:value
-        })
-    };
-
-    const handleBlur = (e) =>{
-        handleChange(e);
-        setErrors(validateForm(form));
+            [fieldName]:value
+        });
     };
     
-    const handleBlurMult = (e) =>{
-        handleChangeMult(e);
-        setErrors(validateForm(form));
-    };
-
-    const handleSubmit = (e) =>{
-        e.preventDefault();
-        setErrors(validateForm(form));
-
-        if(Object.keys(errors).length===0){
-            setError(false)
-        }else{
-            setError(true)
+    const handleSubmit = (resetFields=false) =>{
+        const auxErrors = validateForm(form)
+        setErrors(auxErrors);
+        if(Object.keys(auxErrors).length===0){
+            submitForm(form);
+            if(resetFields) setForm(initialForm);
+            return true;
         }
-
+        return false;
     };
+
+    const resetFields = ()=>{
+        setForm(initialForm);
+        setErrors({});
+    }
 
     return {
         form,
         errors,
-        error,
         handleChange,
-        handleChangeMult,
-        handleBlur,
-        handleBlurMult,
-        handleSubmit
-    }
+        handleDropdown,
+        handleSubmit,
+        resetFields
+    };
 }
+

@@ -1,4 +1,4 @@
-export const helpFieldValidate = (type,data)=>{
+export const helpRegexValidate = (type,data)=>{
     let regexChNuBl = /^[A-Za-z0-9\s]+$/;
     let regexChNuBlDo = /^[A-Za-z0-9\s.]+$/;
     let regexChNuBlEs = /^[A-Za-z0-9ÑñÁáÉéÍíÓóÚúÜü\s]+$/;
@@ -9,13 +9,8 @@ export const helpFieldValidate = (type,data)=>{
 
     switch(type){
         case 'Date':
-            if(!data.match(regExDate)) return false;  // Invalid format
-
-            let d = new Date(data);
-            let dNum = d.getTime();
-            if(!dNum && dNum !== 0) return false; // NaN value, Invalid date
-
-            return d.toISOString().slice(0,10) === data;
+            console.log(data)
+            return regExDate.test(data);
 
         case 'ChNuBl':
             return regexChNuBl.test(data);

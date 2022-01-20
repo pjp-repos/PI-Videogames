@@ -31,7 +31,7 @@ module.exports = (dbConn) => {
         validate: {
           notEmpty: true,
           isNumeric: true,
-          min: 1,
+          min: 0,
           max: 5
        }
       },

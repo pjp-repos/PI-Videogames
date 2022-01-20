@@ -1,97 +1,92 @@
 import styled  from "styled-components";
 import {FaTimes} from 'react-icons/fa';
-import {Link as LinkR} from 'react-router-dom';
+import { Input } from '../AaaGenerics/Input';
 
 export const SidebarContainer = styled.aside`
-    position: fixed;
-    z-index: 990;
     width: 100%;
     height:100%;
-    background: #0d0d0d;
-    display: grid;
-    align-items: center;
-    top: 0;
+    padding: 1rem;
+
+    position: fixed;
+    top: ${
+        ({isOpen})=>(isOpen ? '0' : '-100%' )
+    };
     left: 0;    
+    z-index: 990;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 15% 30% 55%;
+    justify-content: center;
+    align-items: center;
+
+    background: #0d0d0d;
     transition: 0.3s ease-in-out;   
     opacity: ${
         ({isOpen})=>(isOpen ? '1' : '0' )
     };
-    top: ${
-        ({isOpen})=>(isOpen ? '0' : '-100%' )
-    };
+`;
+
+
+export const Icon = styled.div`
+    
+    justify-self: right;
+    
+    font-size: 2rem;
+    
+    background: transparent;
+    cursor: pointer;
+    outline: none;
 `;
 
 export const CloseIcon = styled(FaTimes)`
     color: #fff;
 `;
 
-export const Icon = styled.div`
-    position: absolute;
-    top: 1.2rem;
-    right: 1.5rem;
-    background: transparent;
-    font-size: 2rem;
-    cursor: pointer;
-    outline: none;
-`;
 
-export const SidebarWapper = styled.div`
-    color: #fff;
-
-`;
 
 export const SidebarMenu = styled.ul`
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(6,60px);
-    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
 
-    @media screen and (min-width: 980px){
-        grid-template-rows: repeat(6,80px);
-    }
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 `;
 
-export const SidebarItemBtn = styled.button`
+export const SidebarMenuItem = styled.button`
+    width: 100%;
     padding: 12px 30px;
-    color: white;
-    background-color: transparent;
-    font-size: 1rem;
-    outline: none;
     border: none;
-    cursor: pointer;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
+    font-size: 1rem;
+    color: white;
+    
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
     &:hover{
         border-bottom: 3px solid #01bf71;
     }
 `;
 
-export const SidebarBtnWrap = styled.div`
+export const SideSearchWrap = styled.div`
+    width: 100%;
+    height: 100%;
+
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;     
 `;
 
-export const SidebarRoute = styled(LinkR)`
-    border-radius: 50px;    
-    white-space: nowrap;
-    padding: 16px 64px;    
-    font-size: 16px;
-    outline: none;
-    border: none;
-    text-decoration: none;
-    cursor: pointer;
-    // Transition - Normal state
-    transition: all 0.2s ease-in-out;
-    background: #01bf71;
-    color: #010606;
-    // Transition - Hover state
-    &:hover{
-        transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
-    }
+export const SideSearchInput = styled(Input)`
+    width: 100%;
 `;
+

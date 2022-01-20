@@ -8,69 +8,108 @@ import {
     setModal 
 } from '../../../redux/actions/actionsGames';
 
+import { 
+    sortCbNameNcsAsc,
+    sortCbNameNcsDesc,
+    sortCbRatingAsc,
+    sortCbRatingDesc,
+    sortCbReleasedAsc,
+    sortCbReleasedDesc 
+} from '../../../helpers/helpSortCallbacks';
+
 // Custom hooks
-import { useOrder } from '../../../hooks/useOrder';
+import { useForm } from '../../../hooks/useForm';
 
 // Styled components
 import {
     OrderPanelWrapper,
-    OrderPanelSelect,
-    OrderPanelOption,
-    OrderPanelButton
+    OrderPanelButton,
+    OrderPanelButtonWrapp
 } from "./OrderPanelElements";
+import Dropdown from '../../AaaGenerics/Dropdown/Dropdown';
+import { H3 } from '../../AaaGenerics/Texts/Hx';
 
+// Form fields
+const initialForm ={
+    order: "", 
+};
 
-const initialOrder = "";
+const sortCallbacks = {
+    nameAsc:sortCbNameNcsAsc,
+    nameDesc:sortCbNameNcsDesc,
+    ratingAsc:sortCbRatingAsc,
+    ratingDesc:sortCbRatingDesc,
+    releasedAsc:sortCbReleasedAsc,
+    releasedDesc:sortCbReleasedDesc
+}
+
+// Field validations
+const validationsForm = (form)=>{
+    let errors={};
+    return errors;
+};
 
 const orderList = [
-    {value:"",text:"No order"},
-    {value:"nameAsc",text:"Order by name ascending"},
-    {value:"nameDesc",text:"Order by name descending"},
-    {value:"ratingAsc",text:"Order by rating ascending"},
-    {value:"ratingDesc",text:"Order by rating descending"},
-    {value:"releasedAsc",text:"Order by released date ascending"},
-    {value:"releasedDesc",text:"Order by released date descending"},
+    {key:"",value:"No order"},
+    {key:"nameAsc",value:"Order by name ascending"},
+    {key:"nameDesc",value:"Order by name descending"},
+    {key:"ratingAsc",value:"Order by rating ascending"},
+    {key:"ratingDesc",value:"Order by rating descending"},
+    {key:"releasedAsc",value:"Order by released date ascending"},
+    {key:"releasedDesc",value:"Order by released date descending"},
 ];
 
 const OrderPanel = () => {
     // Redux
     const dispatch = useDispatch();    
     const closeModal=()=>dispatch(setModal({modal:'orderPanel',value:false}));
-    // useOrder custom hook
-    const {   
-        order,   
-        handleChange,
-        resetOrder
-    } = useOrder(initialOrder);
+    
+    const submitForm=(form)=>dispatch(orderGames({form:form, Cbs:sortCallbacks}));
+    
+    // Custom hook useForm
+    const {        
+        form,
+        handleDropdown,
+        handleSubmit,
+        resetFields
+    } = useForm(initialForm, validationsForm, submitForm);
 
-    const handleExecuteOrder = ()=>{
-        dispatch(orderGames(order));
-        resetOrder();
+    const handleExecute = ()=>{
+        if(handleSubmit(true)){
+            closeModal();
+        };
+    };
+
+    const handleCancel = ()=>{
+        resetFields();
         closeModal();
     };
 
     return (
         <>
             <OrderPanelWrapper>
-                <OrderPanelSelect 
-                    value={order}
-                    onChange={handleChange}
-                >
-                    {
-                        orderList.map((el)=>
-                        <OrderPanelOption key={el.value} value={el.value}>
-                            {el.text}
-                        </OrderPanelOption>
-                        )
-                    }
-                </OrderPanelSelect>
-
-                <OrderPanelButton onClick={handleExecuteOrder}>
-                    Order
-                </OrderPanelButton>
-                <OrderPanelButton onClick={closeModal}>
-                    Cancel/Close
-                </OrderPanelButton>
+                <H3>Order panel</H3>
+                <Dropdown 
+                        titleOn="Order by"
+                        titleOff="Close"
+                        options={orderList}
+                        multiple={false}
+                        
+                        fieldName='order'
+                        fieldValue={form.order}
+                        dropdownCb={handleDropdown}
+                />
+                <OrderPanelButtonWrapp>
+                    <OrderPanelButton onClick={resetFields}>
+                        Clear fields
+                    </OrderPanelButton>
+                    <OrderPanelButton onClick={handleCancel}>
+                        Cancel/Close
+                    </OrderPanelButton>
+                    <OrderPanelButton onClick={handleExecute}>
+                        Order
+                    </OrderPanelButton>
+                </OrderPanelButtonWrapp>
             </OrderPanelWrapper>
         </>
     )
